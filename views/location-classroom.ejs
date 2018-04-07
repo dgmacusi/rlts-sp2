@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/materialize.min.js"></script>
+    <script type="text/javascript" src="/javascripts/script.js"></script>
+  </head>
+  <body>
+    <div class="navbar-fixed">
+      <nav class="grey">
+        <div class="nav-wrapper">
+          <a href="#" class="brand-logo center">LOGO</a>
+          CLASSROOM
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li><a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="large material-icons">menu</i></a></li>
+          </ul>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/signout">SIGN OUT</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <br>
+    <div class="row">
+      <div class="col s8"></div>
+      <div class="col s4">
+        <nav class="grey lighten-5">
+          <div class="nav-wrapper">
+            <form method="POST" action="/classroom/search">
+              <div class="input-field">
+                <input id="search" name="search" type="search" required>
+                <label class="label-icon" for="search"><i class="material-icons" style="color: grey;">search</i></label>
+                <i class="material-icons">close</i>
+              </div>
+            </form>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row">
+      <% if (classrooms) { %>
+      <% for(var i=0; i < classrooms.length; i++) { %>
+        <form method="POST" action="/">
+        
+        <input type="hidden" value="<%= classrooms[i].classroomId%>" id="classroomId" name="classroomId">
+        <input type="hidden" value="<%= classrooms[i].noOfStudents%>" id="noOfStudents" name="noOfStudents">
+        <input type="hidden" value="<%= classrooms[i].gradeLevel%>" id="gradeLevel" name="gradeLevel">
+        <input type="hidden" value="<%= classrooms[i].section%>" id="section" name="section">
+        <input type="hidden" value="<%= classrooms[i].userId%>" id="userId" name="userId">
+        <input type="hidden" value="<%= classrooms[i].locationId%>" id="locationId" name="locationId">
+        <input type="hidden" value="<%= classrooms[i].beaconId%>" id="beaconId" name="beaconId">
+        <input type="hidden" value="<%= classrooms[i].name%>" id="name" name="name">
+        <input type="hidden" value="<%= classrooms[i].beacon%>" id="beacon" name="beacon">
+        <input type="hidden" value="<%= classrooms[i].user%>" id="user" name="user">
+
+        <div class="col s4">
+          <div class="card z-depth-4" style="height:236px;">
+            <div class="card-action grey white-text">
+              <span class="card-title"><%= classrooms[i].name%></span>
+
+              <button type="submit" class="right" formaction="/classroom/delete/<%= classrooms[i].classroomId%>"><i class="small material-icons">delete</i></button>
+              <button type="submit" class="right" formaction="/classroom/edit"><i class="small material-icons">edit</i></button>
+            </div>
+            <div class="card-content left grey lighten-3" style="width:30%; padding-bottom: 23px;">
+              <p>Classroom ID: </p>
+              <p>No. Of Students: </p>
+              <p>Grade Level: </p>
+              <p>Section: </p>
+              <p>Adviser: </p>
+              <p>Beacon: </p>
+            </div>
+            <div class="card-content right" style="width:70%; padding-bottom: 23px;">
+              <p>&nbsp;</p>
+              <p><%= classrooms[i].classroomId %></p>
+              <p>&nbsp;</p>
+              <p><%= classrooms[i].noOfStudents %></p>
+              <p><%= classrooms[i].gradeLevel %></p>
+              <p><%= classrooms[i].section %></p>
+              <p><%= classrooms[i].user %></p>
+              <p><%= classrooms[i].beacon %></p>
+            </div>
+          </div>
+        </div>
+        </form>
+      <% } %>
+      <% } %>
+    </div>
+
+    <a href="/location/add" class="add-button2 btn-floating btn-large waves-effect waves-light grey" style="position: fixed;"><i class="material-icons">add</i></a>
+
+    <ul id="slide-out" class="side-nav">
+      <li>
+        <div class="app-logo">
+          <img src="/images/logo-placeholder.png">
+        </div>
+      </li>
+      <li><a href="/home"><i class="material-icons">dashboard</i>DASHBOARD</a></li>
+      <li><a href="/beacons"><i class="material-icons">my_location</i>BEACONS</a></li>
+      <!-- Dropdown Structure -->
+      <li><a class="dropdown-button" href="/users" data-activates="user-type"><i class="material-icons">account_circle</i>USERS</a></li>
+        <ul id="user-type" class="dropdown-content">
+          <li><a href="#!">Administrator</a></li>
+          <li><a href="#!">Teacher</a></li>
+          <li><a href="#!">Student</a></li>
+          <li><a href="#!">Non-teaching</a></li>
+        </ul>
+      <li><a class="dropdown-button white-text grey" href="/location/classroom" data-activates="location-type"><i class="material-icons">location_on</i>LOCATIONS</a></li>
+        <ul id="location-type" class="dropdown-content">
+          <li><a href="/location/classroom">Classroom</a></li>
+          <li><a href="/location/facility">Facility</a></li>
+        </ul>
+      <li><a href="/timelogs"><i class="material-icons">access_time</i>TIMELOGS</a></li>      
+    </ul>
+  </body>
+</html>

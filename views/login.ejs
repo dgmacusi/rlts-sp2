@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/style.css"  media="screen,projection"/>
+    <script type="text/javascript" src="/javascripts/materialize.min.js" async></script>
+    <script type="text/javascript" src="/javascripts/jquery.min.js" async></script>
+  </head>
+  <body>
+    <br><br><br><br><center>
+    <div class="container">
+      <h4 class="white">Login to MyApp</h4>
+      <div class="z-depth-4 grey lighten-5 row login-form">
+        <form class="col s12" href="/login" method="POST">
+          <div class="row">
+            <div class="input-field col s12">
+              <input class="validate" type="text" name="username" id="username" />
+              <label for="username">Username</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <input class="validate" type="password" name="password" id="password" />
+              <label for="password">Password</label>
+            </div>
+          </div>
+          <div class="row">
+            <button type="submit" name="btn_login" class="col s12 btn btn-large blue waves-effect">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    </center>
+
+  </body>
+</html>

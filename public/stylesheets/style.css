@@ -1,0 +1,82 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.login-form {
+	 padding : 32px 32px 32px 32px;
+	 width : 45%;
+}
+
+
+input[type="submit"].btn,
+button.btn {
+	cursor: pointer;
+}
+
+a.button,.button {
+  margin-right: 1em; /* remove this while use*/
+  margin-bottom: 1em; /* remove this while use*/
+	display: inline-block;
+	outline: none;
+	*zoom: 1;
+	text-align: center;
+	text-decoration: none;
+	font-family: inherit;
+	font-weight: 300;
+	letter-spacing: 1px;
+	vertical-align: middle;
+	border: 1px solid;
+	transition: all 0.2s ease;
+	box-sizing: border-box;
+	text-shadow: 0 1px 0 rgba(0,0,0,0.01);
+}
+
+.button-radius {
+  border-radius: 3px;
+}
+
+.button-large {
+	font-size: 1.0625em;
+	padding: 1em 1.5em;
+}
+
+/* Colors */
+.button-blue {
+	color: #2196f3;
+	border-color: #2196f3;
+}
+.button-blue:hover {
+  background: #2196f3;
+  color: #fff;
+  border-color: #2196f3;		
+}
+
+.add-button {
+	position: fixed;
+	left: 1200px;
+	top: 480px;
+	padding-top: 24px;
+	margin-bottom: 0;
+}
+
+.add-button2 {
+	position: fixed;
+	left: 1200px;
+	top: 586px;
+	padding-top: 24px;
+	margin-bottom: 0;
+}
+
+button, input[type="submit"], input[type="reset"] {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 2;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}

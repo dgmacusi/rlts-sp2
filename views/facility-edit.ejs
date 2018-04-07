@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/materialize.min.js"></script>
+    <script type="text/javascript" src="/javascripts/script.js"></script>
+  </head>
+  <body>
+    <div class="navbar-fixed">
+      <nav class="grey">
+        <div class="nav-wrapper">
+          <a href="#" class="brand-logo center">LOGO</a>
+          EDIT LOCATION
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li><a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="large material-icons">menu</i></a></li>
+          </ul>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/signout">SIGN OUT</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="center"><h4>EDIT LOCATION</h4></div>
+    <br>
+    <br>
+    <form method="POST" action="/facility/edit/<%= facility.facilityId%>">
+      <input type="hidden" id="locationId" name="locationId" value="<%= facility.locationId%>">
+      <input type="hidden" id="type" name="type" value="facility">
+      <div class="container center">
+        <div class="row">
+          <div class="col s2"></div>
+          <div class="col s8">
+            <div class="row">
+              <div class="input-field col s6">
+                <input placeholder="Location Name" id="name" name="name" type="text" value="<%= facility.name%>" class="validate">
+                <label for="name">Location Name</label>
+              </div>
+              <div class="input-field col s6">
+                <select id="type" name="type">
+                  <option value="" disabled selected>Facility</option>
+                </select>
+                <label>Location Type</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s6">
+                <select id="beaconId" name="beaconId">
+                  <option value="" disabled selected>Choose your option</option>
+                  <% for(var i=0; i < beacons.length; i++) { %>
+                    <% if (beacons[i].beaconId == facility.beaconId) { %>
+                      <option value="<%= facility.beaconId%>" selected><%= facility.beacon%></option>
+                    <% } else { %>
+                      <option value="<%= beacons[i].beaconId%>"><%= beacons[i].name%></option>                  
+                    <% } %>
+                  <% }%>
+                </select>
+                <label>Designated Beacon</label>
+              </div>
+              <div class="input-field col s6">
+                <select id="userId" name="userId">
+                  <option value="" disabled selected>Choose your option</option>
+                  
+                  <% for(var i=0; i < staff.length; i++) { %>
+                    
+                    <% if (staff[i].userId == facility.userId) { %>
+                      <option value="<%= facility.userId%>" selected><%= facility.user%></option>
+                    <% } else { %>
+                      <option value="<%= staff[i].userId%>"><%= staff[i].lastName%>,  <%= staff[i].firstName%></option>                    
+                    <% } %>
+
+                  <% }%>
+                  
+                </select>
+                <label>Adviser/Caretaker</label>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s9"></div>
+              <div class="col s3">
+                <button class="btn waves-effect waves-light" type="submit" name="action"><i class="material-icons left">edit</i>EDIT</button>
+              </div>
+            </div>
+          </div>
+          <div class="col s2"></div>
+        </div>  
+      </div>
+    </form>
+
+    <a class="add-button2 btn-floating btn-large waves-effect waves-light grey" style="position: fixed;"><i class="material-icons">add</i></a>
+
+    <ul id="slide-out" class="side-nav">
+      <li>
+        <div class="app-logo">
+          <img src="/images/logo-placeholder.png">
+        </div>
+      </li>
+      <li><a href="/home"><i class="material-icons">dashboard</i>DASHBOARD</a></li>
+      <li><a href="/beacons"><i class="material-icons">my_location</i>BEACONS</a></li>
+      <!-- Dropdown Structure -->
+      <li><a class="dropdown-button" href="/users" data-activates="user-type"><i class="material-icons">account_circle</i>USERS</a></li>
+        <ul id="user-type" class="dropdown-content">
+          <li><a href="#!">Administrator</a></li>
+          <li><a href="#!">Teacher</a></li>
+          <li><a href="#!">Student</a></li>
+          <li><a href="#!">Non-teaching</a></li>
+        </ul>
+      <li><a class="dropdown-button white-text grey" href="/location/classroom" data-activates="location-type"><i class="material-icons">location_on</i>LOCATIONS</a></li>
+        <ul id="location-type" class="dropdown-content">
+          <li><a href="/location/classroom">Classroom</a></li>
+          <li><a href="/location/facility">Facility</a></li>
+        </ul>
+      <li><a href="/timelogs"><i class="material-icons">access_time</i>TIMELOGS</a></li>      
+    </ul>
+  </body>
+</html>
