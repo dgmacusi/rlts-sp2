@@ -60,9 +60,10 @@
           <div class="input-field col s6">
             <select id="classroomId" name="classroomId">
               <option value="" disabled selected>Choose your option</option>
-              
+              <% if (classrooms) { %>
               <% for(var i=0; i < classrooms.length; i++) { %>
                 <option value="<%= classrooms[i].classroomId%>"><%= classrooms[i].gradeLevel%> - <%= classrooms[i].section%></option>                  
+              <% }%>
               <% }%>
               
             </select>
