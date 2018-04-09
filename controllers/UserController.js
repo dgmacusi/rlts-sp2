@@ -1,5 +1,5 @@
 var User = require(`${__dirname}/../models/User`);
-
+var Location = require(`${__dirname}/../models/Location`) 
 
 module.exports = {
 	getAdministratorPage : function (req, res, next) {
@@ -48,5 +48,58 @@ module.exports = {
 
 			res.redirect('/users/administrator')
 		})
+	},
+
+	getStudentPage : function (req, res, next) {
+		User.getStudents(function (err, students) {
+			res.render('student', { title : "My App", students : students })
+		})
+	}, 
+
+	searchStudents : function (req, res, next) {
+		User.searchStudents(req.body.search, function (err, students) {
+			res.render('student', { title : "My App", students : students })	
+		})
+	},
+	getAddStudentPage : function (req, res, next) {
+		Location.getClassrooms(function (err, classrooms) {
+			res.render('student-add', { title : "My App" , classrooms : classrooms })
+		})
+	}, 
+	addStudent : function (req, res, next) {
+		User.addStudent(req.body, function (err, student) {
+			if (err) {
+				console.log(err)
+			} else {
+				console.log('Successfully added Student ID: ' + student)
+			}
+			res.redirect('/users/student')
+		})
+	}, 
+	deleteStudent : function (req, res, next) {
+		User.deleteStudent(req.params.id, function (err, student) {
+			if (err) {
+				console.log(err)
+			} else {
+				console.log('Successfully deleted student ID: ' + student)	
+			}
+			res.redirect('/users/student')
+		})
+	}, 
+	getEditStudentPage : function (req, res, next) {
+		Location.getClassrooms(function (err, classrooms) {
+			res.render('student-edit', { title : "MyApp", student : req.body , classrooms : classrooms})
+		})
+	}, 
+	editStudent : function (req, res, next) {
+		User.editStudent(req.body, function (err, student) {
+			if (err) {
+				console.log(err)
+			} else {
+				console.log('Successfully edited student ID: ' + student)
+			}
+			res.redirect('/users/student')
+		})
 	}
+
 }

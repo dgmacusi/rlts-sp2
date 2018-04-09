@@ -42,13 +42,21 @@ module.exports = {
 	}, 
 
 	editBeacon : function (beacon, cb) {
+		var findQuery = 'SELECT * FROM beacon WHERE name=? AND beaconId<>?'
 		var editQuery = 'UPDATE beacon SET name=?, advertisingInterval=?, broadcastPower=?, minor=?, major=?, uuid=? WHERE beaconId=?'
 		
-		mysqlConnection.query(editQuery, [beacon.beaconName, beacon.advertisingInterval, beacon.broadcastPower, beacon.beaconMinor, beacon.beaconMajor, beacon.beaconUuid, beacon.beaconId], function (err, res) {
-			if (err) throw err;
+		mysqlConnection.query(findQuery, [beacon.beaconName, beacon.beaconId], function (err, rows) {
+			if (err || rows.length > 0) {
+				return cb("Beacon name already exists.", null)
+			}
+			else {
+				mysqlConnection.query(editQuery, [beacon.beaconName, beacon.advertisingInterval, beacon.broadcastPower, beacon.beaconMinor, beacon.beaconMajor, beacon.beaconUuid, beacon.beaconId], function (err, res) {
+					if (err) throw err;
 
-			console.log('Beacon edited!')
-			return cb('Edited beacon ID: ' + beacon.beaconId, beacon.beaconId)
+					console.log('Beacon edited!')
+					return cb('Edited beacon ID: ' + beacon.beaconId, beacon.beaconId)
+				})
+			}
 		})
 	}, 
 	searchBeacons : function (name, cb) {
