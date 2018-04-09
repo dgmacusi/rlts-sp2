@@ -5,6 +5,8 @@ var indexController = require(`${__dirname}/../controllers/IndexController`);
 var authenticationController = require(`${__dirname}/../controllers/AuthenticationController`);
 var beaconController = require(`${__dirname}/../controllers/BeaconController`); 
 var locationController = require(`${__dirname}/../controllers/LocationController`);
+var userController = require(`${__dirname}/../controllers/userController`);
+
 /* GET home page. */
 router.get('/', indexController.getIndexPage)
 router.get('/login', indexController.getLoginPage)
@@ -12,6 +14,7 @@ router.get('/home', authenticationController.authenticate, indexController.getHo
 router.get('/beacons', authenticationController.authenticate, beaconController.getBeaconPage)
 router.get('/location/classroom', authenticationController.authenticate, locationController.getClassroomPage)
 router.get('/location/facility', authenticationController.authenticate, locationController.getFacilityPage)
+router.get('/users/administrator', authenticationController.authenticate, userController.getAdministratorPage)
 router.get('/timelogs', authenticationController.authenticate, indexController.getTimelogPage)
 router.get('/users', authenticationController.authenticate, indexController.getUserPage)
 router.get('/beacons/add', authenticationController.authenticate, indexController.getAddBeaconPage)
@@ -36,5 +39,13 @@ router.post('/classroom/edit', authenticationController.authenticate, locationCo
 router.post('/classroom/edit/:id', authenticationController.authenticate, locationController.editClassroom)
 router.post('/facility/edit', authenticationController.authenticate, locationController.getEditFacilityPage)
 router.post('/facility/edit/:id', authenticationController.authenticate, locationController.editFacility)
+
+router.get('/users/administrator/add', authenticationController.authenticate, userController.getAddAdministratorPage)
+
+router.post('/users/administrator/search', authenticationController.authenticate, userController.searchAdministrators)
+router.post('/users/administrator/add', authenticationController.authenticate, userController.addAdministrator)
+router.post('/users/administrator/delete/:id', authenticationController.authenticate, userController.deleteAdministrator)
+router.post('/users/administrator/edit', authenticationController.authenticate, userController.getEditAdministratorPage)
+router.post('/users/administrator/edit/:id', authenticationController.authenticate, userController.editAdministrator)
 
 module.exports = router;

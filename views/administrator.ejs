@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/materialize.min.js"></script>
+    <script type="text/javascript" src="/javascripts/script.js"></script>
+  </head>
+  <body>
+    <div class="navbar-fixed">
+      <nav class="grey">
+        <div class="nav-wrapper">
+          <a href="#" class="brand-logo center">LOGO</a>
+          ADMINISTRATOR
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li><a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="large material-icons">menu</i></a></li>
+          </ul>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/signout">SIGN OUT</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <br>
+    <div class="row" style="padding-left: 40px; padding-right: 40px; ">
+      <div class="col s6">
+        <a href="/users/administrator/add" class="btn-large waves-effect waves-light grey" type="submit" name="action"><i class="material-icons left">add</i>ADD USER
+          </a>
+      </div>
+      <div class="col s2"></div>
+      <div class="col s4">
+        <nav class="grey lighten-5" style="height: 55px">
+          <div class="nav-wrapper">
+            <form method="POST" action="/users/administrator/search">
+              <div class="input-field">
+                <input id="search" name="search" type="search" required>
+                <label class="label-icon" for="search"><i class="material-icons" style="color: grey;">search</i></label>
+                <i class="material-icons">close</i>
+              </div>
+            </form>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row" style="padding-left: 50px; padding-right: 50px; ">
+      <table class="bordered highlight responsive-table" style="border: ridge;">
+        <thead class="grey lighten-3">
+          <th style="padding-left: 50px;">ID</th>
+          <th>USERNAME</th>
+          <th>LASTNAME</th>
+          <th>FIRTSNAME</th>
+          <th>EMP NO.</th>
+          <th>POSITION</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <div class="row">
+            <% if (administrators) { %>
+            <% for(var i=0; i < administrators.length; i++) { %>
+              <form method="POST" action="/">
+                <input type="hidden" value="<%= administrators[i].userId%>" id="userId" name="userId">
+                <input type="hidden" value="<%= administrators[i].lastName%>" id="lastName" name="lastName">
+                <input type="hidden" value="<%= administrators[i].firstName%>" id="firstName" name="firstName">
+                <input type="hidden" value="<%= administrators[i].username%>" id="username" name="username">
+                <input type="hidden" value="<%= administrators[i].type%>" id="type" name="type">
+                <input type="hidden" value="<%= administrators[i].administratorId%>" id="administratorId" name="administratorId">
+                <input type="hidden" value="<%= administrators[i].employeeNumber%>" id="employeeNumber" name="employeeNumber">
+                <input type="hidden" value="<%= administrators[i].position%>" id="position" name="position">
+                <tr>
+                  <td style="padding-left: 50px;"><%= administrators[i].administratorId %></td>
+                  <td><%= administrators[i].username %></td>
+                  <td><%= administrators[i].lastName %></td>
+                  <td><%= administrators[i].firstName %></td>
+                  <td><%= administrators[i].employeeNumber %></td>
+                  <td><%= administrators[i].position %></td>
+
+                  <td><button type="submit" class="right" formaction="/users/administrator/delete/<%= administrators[i].userId%>"><i class="small material-icons">delete</i></button><button type="submit" class="right" formaction="/users/administrator/edit"><i class="small material-icons">edit</i></button></td>
+                </tr>
+              </form>
+            <% } %>
+            <% } %>
+          </div>
+        </tbody>
+      </table>
+    </div>
+   
+    <ul id="slide-out" class="side-nav">
+      <li>
+        <div class="app-logo">
+          <img src="/images/logo-placeholder.png">
+        </div>
+      </li>
+      <li><a href="/home"><i class="material-icons">dashboard</i>DASHBOARD</a></li>
+      <li><a href="/beacons"><i class="material-icons">my_location</i>BEACONS</a></li>
+      <!-- Dropdown Structure -->
+      <li><a class="dropdown-button white-text grey" href="/users/administrator" data-activates="user-type"><i class="material-icons">account_circle</i>USERS</a></li>
+        <ul id="user-type" class="dropdown-content">
+          <li><a href="/users/administrator">Administrator</a></li>
+          <li><a href="/users/teacher">Teacher</a></li>
+          <li><a href="/users/student">Student</a></li>
+          <li><a href="/users/nonteaching">Non-teaching</a></li>
+        </ul>
+      <li><a class="dropdown-button" href="/location/classroom" data-activates="location-type"><i class="material-icons">location_on</i>LOCATIONS</a></li>
+        <ul id="location-type" class="dropdown-content">
+          <li><a href="/location/classroom">Classroom</a></li>
+          <li><a href="/location/facility">Facility</a></li>
+        </ul>
+      <li><a href="/timelogs"><i class="material-icons">access_time</i>TIMELOGS</a></li>      
+    </ul>
+  </body>
+</html>
