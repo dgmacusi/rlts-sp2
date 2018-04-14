@@ -16,6 +16,8 @@ router.get('/location/classroom', authenticationController.authenticate, locatio
 router.get('/location/facility', authenticationController.authenticate, locationController.getFacilityPage) 
 router.get('/users/administrator', authenticationController.authenticate, userController.getAdministratorPage)
 router.get('/users/student', authenticationController.authenticate, userController.getStudentPage)
+router.get('/users/teacher', authenticationController.authenticate, userController.getTeacherPage)
+router.get('/users/nonteaching', authenticationController.authenticate, userController.getStaffPage)
 router.get('/timelogs', authenticationController.authenticate, indexController.getTimelogPage)
 router.get('/users', authenticationController.authenticate, indexController.getUserPage)
 router.get('/beacons/add', authenticationController.authenticate, indexController.getAddBeaconPage)
@@ -56,5 +58,21 @@ router.post('/users/student/add', authenticationController.authenticate, userCon
 router.post('/users/student/delete/:id', authenticationController.authenticate, userController.deleteStudent)
 router.post('/users/student/edit', authenticationController.authenticate, userController.getEditStudentPage)
 router.post('/users/student/edit/:id', authenticationController.authenticate, userController.editStudent)
+
+router.get('/users/teacher/add', authenticationController.authenticate, userController.getAddTeacherPage)
+
+router.post('/users/teacher/search', authenticationController.authenticate, userController.searchTeachers)
+router.post('/users/teacher/add', authenticationController.authenticate, userController.addTeacher)
+router.post('/users/teacher/delete/:id', authenticationController.authenticate, userController.deleteTeacher)
+router.post('/users/teacher/edit', authenticationController.authenticate, userController.getEditTeacherPage)
+router.post('/users/teacher/edit/:id', authenticationController.authenticate, userController.editTeacher)
+
+router.get('/users/nonteachingstaff/add', authenticationController.authenticate, userController.getAddStaffPage)
+
+router.post('/users/nonteachingstaff/search', authenticationController.authenticate, userController.searchStaff)
+router.post('/users/nonteachingstaff/add', authenticationController.authenticate, userController.addStaff)
+router.post('/users/nonteachingstaff/delete/:id', authenticationController.authenticate, userController.deleteStaff)
+router.post('/users/nonteachingstaff/edit', authenticationController.authenticate, userController.getEditStaffPage)
+router.post('/users/nonteachingstaff/edit/:id', authenticationController.authenticate, userController.editStaff)
 
 module.exports = router;

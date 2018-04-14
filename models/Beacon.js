@@ -32,45 +32,11 @@ module.exports = {
 		})
 	}, 
 	deleteBeacon : function (beaconId, cb) {
-		var findLocationQuery = 'SELECT * FROM location WHERE beaconId=?'
-		var deleteClassroomQuery = 'DELETE FROM classroom WHERE locationId=?'
-		var deleteFacilityQuery = 'DELETE FROM facility WHERE locationId=?'
-
-
-		var deleteLocationQuery = 'DELETE FROM location WHERE beaconId=?' 
 		var deleteBeaconQuery = 'DELETE FROM beacon WHERE beaconId=?'
+		mysqlConnection.query(deleteBeaconQuery, [beaconId], function (err, res) {
+			if (err) throw err;
 
-		mysqlConnection.query(findLocationQuery, [beaconId], function (err, row) {
-			console.log(row)
-
-
-			if (row[0].type == 'classroom') {
-				mysqlConnection.query(deleteClassroomQuery, [row[0].locationId], function (err, res) {
-					mysqlConnection.query(deleteLocationQuery, [beaconId], function (err, res) {
-						if (err) throw err;
-
-
-						mysqlConnection.query(deleteBeaconQuery, [beaconId], function (err, res) {
-							if (err) throw err;
-
-							return cb('Deleted beacon ID: ' + beaconId, beaconId)
-						})
-					})
-				})
-			} else if (row[0].type == 'facility') {
-				mysqlConnection.query(deleteFacilityQuery, [row[0].locationId], function (err, res) {
-					mysqlConnection.query(deleteLocationQuery, [beaconId], function (err, res) {
-						if (err) throw err;
-
-
-						mysqlConnection.query(deleteBeaconQuery, [beaconId], function (err, res) {
-							if (err) throw err;
-
-							return cb('Deleted beacon ID: ' + beaconId, beaconId)
-						})
-					})
-				})
-			}
+			return cb('Deleted beacon ID: ' + beaconId, beaconId)
 		})
 	}, 
 

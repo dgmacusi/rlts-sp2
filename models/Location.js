@@ -12,11 +12,26 @@ module.exports = {
 				rows.forEach(function (row, index) {
 					mysqlConnection.query(locationQuery, [row.locationId], function (err, location_row) {
 						row.name = location_row[0].name
+
 						mysqlConnection.query(userQuery, [row.userId], function (err, user_row) {
-							row.user = user_row[0].lastName + ', ' + user_row[0].firstName
+
+							if (user_row[0] != undefined && user_row[0] != null) {
+								row.user = user_row[0].lastName + ', ' + user_row[0].firstName
+							} else {
+								row.user = null
+							}
+
 							mysqlConnection.query(beaconQuery, [location_row[0].beaconId], function (err, beacon_row) {
-								row.beacon = beacon_row[0].name
-								row.beaconId = beacon_row[0].beaconId
+
+								if (beacon_row[0] != null && beacon_row[0] != undefined) {
+									row.beacon = beacon_row[0].name
+									row.beaconId = beacon_row[0].beaconId
+								} else {
+									row.beacon = null
+									row.beaconId = null
+								}
+								
+
 								if (index == rows.length-1) {
 									return cb(null, rows)
 								}
@@ -42,10 +57,22 @@ module.exports = {
 					mysqlConnection.query(locationQuery, [row.locationId], function (err, location_row) {
 						row.name = location_row[0].name
 						mysqlConnection.query(userQuery, [row.userId], function (err, user_row) {
-							row.user = user_row[0].lastName + ', ' + user_row[0].firstName
+
+							if (user_row[0] != undefined && user_row[0] != null) {
+								row.user = user_row[0].lastName + ', ' + user_row[0].firstName
+							} else {
+								row.user = null
+							}
+
 							mysqlConnection.query(beaconQuery, [location_row[0].beaconId], function (err, beacon_row) {
-								row.beacon = beacon_row[0].name
-								row.beaconId = beacon_row[0].beaconId
+								if (beacon_row[0] != null && beacon_row[0] != undefined) {
+									row.beacon = beacon_row[0].name
+									row.beaconId = beacon_row[0].beaconId
+								} else {
+									row.beacon = null
+									row.beaconId = null
+								}
+
 								if (index == rows.length-1) {
 									return cb(null, rows)
 								}

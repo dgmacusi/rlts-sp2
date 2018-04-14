@@ -100,6 +100,100 @@ module.exports = {
 			}
 			res.redirect('/users/student')
 		})
-	}
+	},
+	getTeacherPage : function (req, res, next) {
+		User.getTeachers(function (err, teachers) {
+			res.render('teacher', { title : "My App", teachers : teachers })
+		})
+	}, 
+	searchTeachers : function (req, res, next) {
+		User.searchTeachers(req.body.search, function (err, teachers) {
+			res.render('teacher', { title : "My App", teachers : teachers })	
+		})
+	}, 
+	getAddTeacherPage : function (req, res, next) {
+		res.render('teacher-add', { title : "My App" })
+	}, 
+	addTeacher : function (req, res, next) {
+		User.addTeacher(req.body, function (err, teacher) {
+			if (err) {
+				console.log(err)
+			} else {
+				console.log('Successfully added Teacher ID: ' + teacher)
+			}
+			res.redirect('/users/teacher')
+		})
+	}, 
+	deleteTeacher : function (req, res, next) {
+		User.deleteTeacher(req.params.id, function (err, teacher) {
+			if (err) {
+				console.log(err)
+			} else {
+				console.log('Successfully deleted teacher ID: ' + teacher)	
+			}
+			res.redirect('/users/teacher')
+		})
+	}, 
+	getEditTeacherPage : function (req, res, next) {
+		res.render('teacher-edit', { title : "MyApp", teacher : req.body })
+	}, 
+	editTeacher : function (req, res, next) {
+		User.editTeacher(req.body, function (err, teacher) {
+			if (err) {
+				console.log(err)
+			} else {
+				console.log('Successfully edited teacher ID: ' + teacher)
+			}
+			res.redirect('/users/teacher')
+		})
+	}, 
+	getStaffPage : function (req, res, next) {
+		User.getStaff(function (err, staff) {
+			res.render('nonteachingstaff', { title : "My App", staff : staff })
+		})
+	}, 
 
+
+	searchStaff : function (req, res, next) {
+		User.searchStaff(req.body.search, function (err, staff) {
+			res.render('nonteachingstaff', { title : "My App", staff : staff })	
+		})
+	}, 
+
+	getAddStaffPage : function (req, res, next) {
+		res.render('nonteachingstaff-add', { title : "My App" })
+	},
+	addStaff : function (req, res, next) {
+		User.addStaff(req.body, function (err, staff) {
+			if (err) {
+				console.log(err)
+			} else {
+				console.log('Successfully added staff ID: ' + staff)
+			}
+			res.redirect('/users/nonteaching')
+		})
+	}, 
+	deleteStaff : function (req, res, next) {
+		User.deleteStaff(req.params.id, function (err, staff) {
+			if (err) {
+				console.log(err)
+			} else {
+				console.log('Successfully deleted staff ID: ' + staff)	
+			}
+			res.redirect('/users/nonteaching')
+		})
+	}, 
+	getEditStaffPage : function (req, res, next) {
+		res.render('nonteachingstaff-edit', { title : "MyApp", staff : req.body })
+	}, 
+	editStaff : function (req, res, next) {
+		User.editStaff(req.body, function (err, staff) {
+			if (err) {
+				console.log(err)
+			} else {
+				console.log('Successfully edited staff ID: ' + staff)
+			}
+			res.redirect('/users/nonteaching')
+		})
+	}, 
 }

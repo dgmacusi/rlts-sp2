@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/materialize.min.js"></script>
+    <script type="text/javascript" src="/javascripts/script.js"></script>
+  </head>
+  <body>
+    <div class="navbar-fixed">
+      <nav class="grey">
+        <div class="nav-wrapper">
+          <a href="#" class="brand-logo center">LOGO</a>
+           TEACHER
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li><a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="large material-icons">menu</i></a></li>
+          </ul>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/signout">SIGN OUT</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+
+    <div class="center"><h4>EDIT TEACHER</h4></div>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col s3"></div>
+      <form class="col s6" action="/users/teacher/edit/<%= teacher.userId%>" method="POST">
+        <input type="hidden" value="<%= teacher.userId%>" id="userId" name="userId">
+        <input type="hidden" value="<%= teacher.type%>" id="type" name="type">
+        <input type="hidden" value="<%= teacher.teacherId%>" id="teacherId" name="teacherId">
+        <input type="hidden" value="<%= teacher.section%>" id="section" name="section">
+
+        <div class="row">
+          <div class="input-field col s6">
+            <input placeholder="Lastname" value="<%= teacher.lastName%>" id="lastName" name="lastName" type="text" class="validate">
+            <label for="lastName">Lastname</label>
+          </div>
+          <div class="input-field col s6">
+            <input placeholder="Firstname" value="<%= teacher.firstName%>" id="firstName" name="firstName" type="text" class="validate">
+            <label for="firstName">Firstname</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s6">
+            <input placeholder="Username" value="<%= teacher.username%>" type="text" name="username" id="username" class="validate">
+            <label for="username">Username</label>
+          </div>
+          <div class="input-field col s6">
+            <input placeholder="Password" type="password" name="password" id="password" class="validate">
+            <label for="password">Password</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s6">
+            <input placeholder="Employee Number" value="<%= teacher.employeeNumber%>" type="text" name="employeeNumber" id="employeeNumber" class="validate">
+            <label for="employeeNumber">Employee Number</label>
+          </div>
+          <div class="input-field col s6">
+          </div>
+        </div>
+
+
+        <div class="row right-align">
+          <button class="btn waves-effect waves-light" type="submit" name="action"><i class="material-icons left">edit</i>EDIT
+          </button>
+        </div>
+      </form>
+      <div class="col s3"></div>
+    </div>
+
+
+
+
+
+    <ul id="slide-out" class="side-nav">
+      <li>
+        <div class="app-logo">
+          <img src="/images/logo-placeholder.png">
+        </div>
+      </li>
+      <li><a href="/home"><i class="material-icons">dashboard</i>DASHBOARD</a></li>
+      <li><a class="grey white-text" href="/beacons"><i class="material-icons">my_location</i>BEACONS</a></li>
+      <!-- Dropdown Structure -->
+      <li><a class="dropdown-button" href="/users/administrator" data-activates="user-type"><i class="material-icons">account_circle</i>USERS</a></li>
+        <ul id="user-type" class="dropdown-content">
+          <li><a href="/users/administrator">Administrator</a></li>
+          <li><a href="/users/teacher">Teacher</a></li>
+          <li><a href="/users/student">Student</a></li>
+          <li><a href="/users/nonteaching">Non-teaching</a></li>
+        </ul>
+      <li><a class="dropdown-button" href="/location/classroom" data-activates="location-type"><i class="material-icons">location_on</i>LOCATIONS</a></li>
+        <ul id="location-type" class="dropdown-content">
+          <li><a href="/location/classroom">Classroom</a></li>
+          <li><a href="/location/facility">Facility</a></li>
+        </ul>
+      <li><a href="/timelogs"><i class="material-icons">access_time</i>TIMELOGS</a></li>      
+    </ul>
+  </body>
+</html>
