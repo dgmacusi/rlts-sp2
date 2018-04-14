@@ -42,7 +42,7 @@ module.exports = {
 						user.employeeNumber = admin_row[0].employeeNumber
 						user.administratorId = admin_row[0].administratorId
 						user.position = admin_row[0].position
-
+						user.isAdmin = admin_row[0].isAdmin
 						if (index == users.length-1) {
 							return cb(null, users)
 						}
@@ -65,7 +65,7 @@ module.exports = {
 						user.employeeNumber = admin_row[0].employeeNumber
 						user.administratorId = admin_row[0].administratorId
 						user.position = admin_row[0].position
-
+						user.isAdmin = admin_row[0].isAdmin
 						if (index == users.length-1) {
 							return cb(null, users)
 						}
@@ -81,7 +81,11 @@ module.exports = {
 		var getQuery = 'SELECT * FROM user WHERE username=?'
 		var addUserQuery = 'INSERT INTO user(firstName, lastName, username, password, type) VALUES(?, ?, ?, ?, ?)'
 		var findQuery = 'SELECT * FROM user WHERE username=?'
-		var addAdministratorQuery = 'INSERT INTO administrator(employeeNumber, position, userId) VALUES(?, ?, ?)'
+		var addAdministratorQuery = 'INSERT INTO administrator(employeeNumber, position, isAdmin, userId) VALUES(?, ?, ?, ?)'
+		var isAdmin = 0
+		if (administrator.isAdmin) {
+			isAdmin = 1
+		}
 
 		mysqlConnection.query(getQuery, [administrator.username], function (err, rows) {
 			if (rows.length > 0) {
@@ -90,7 +94,7 @@ module.exports = {
 				bcrypt.hash(administrator.password, 10, function(err, hash) {
 					mysqlConnection.query(addUserQuery, [administrator.firstName, administrator.lastName, administrator.username, hash, 'administrator'], function (err, user) {
 						mysqlConnection.query(findQuery, [administrator.username], function (err, user) {
-							mysqlConnection.query(addAdministratorQuery, [administrator.employeeNumber, administrator.position, user[0].userId], function (err, admin) {
+							mysqlConnection.query(addAdministratorQuery, [administrator.employeeNumber, administrator.position, isAdmin, user[0].userId], function (err, admin) {
 								return cb(null, admin.administratorId)
 							})
 						})
@@ -116,8 +120,11 @@ module.exports = {
 	editAdministrator : function (administrator, cb) {
 		var checkUsernameQuery = 'SELECT * FROM user WHERE username=? AND userId<>?'
 		var editUserQuery = 'UPDATE user SET lastName=?, firstName=?, username=?, password=? WHERE userId=?'
-		var editAdministratorQuery = 'UPDATE administrator SET employeeNumber=?, position=? WHERE userId=?'
-
+		var editAdministratorQuery = 'UPDATE administrator SET employeeNumber=?, position=?, isAdmin=? WHERE userId=?'
+		var isAdmin = 0
+		if (administrator.isAdmin) {
+			isAdmin = 1
+		}
 
 		mysqlConnection.query(checkUsernameQuery, [administrator.username, administrator.userId], function (err, rows) {
 			if (err || rows.length > 0) {
@@ -126,7 +133,7 @@ module.exports = {
 
 				bcrypt.hash(administrator.password, 10, function(err, hash) {
 					mysqlConnection.query(editUserQuery, [administrator.lastName, administrator.firstName, administrator.username, hash, administrator.userId], function (err, res) {
-						mysqlConnection.query(editAdministratorQuery, [administrator.employeeNumber, administrator.position, administrator.userId], function (err, res2) {
+						mysqlConnection.query(editAdministratorQuery, [administrator.employeeNumber, administrator.position, isAdmin, administrator.userId], function (err, res2) {
 							return cb(null, administrator.userId)
 						})
 					})
@@ -254,12 +261,13 @@ module.exports = {
 
 		mysqlConnection.query(getQuery, function (err, users) {
 			if (users.length > 0) {
+				console.log(users)
 				users.forEach(function (user, index) {
 					mysqlConnection.query(getTeachersQuery, [user.userId], function (err, teacher_row) {
 						mysqlConnection.query(getClassroomQuery, [user.userId], function (err, room_row) {
 							user.teacherId = teacher_row[0].teacherId
 							user.employeeNumber = teacher_row[0].employeeNumber
-							
+							user.isAdmin = teacher_row[0].isAdmin
 							if (room_row[0] != undefined && room_row[0] != null) {
 								user.section = room_row[0].gradeLevel+ ' - ' +room_row[0].section
 							} else {
@@ -291,7 +299,7 @@ module.exports = {
 						mysqlConnection.query(getClassroomQuery, [user.userId], function (err, room_row) {
 							user.teacherId = teacher_row[0].teacherId
 							user.employeeNumber = teacher_row[0].employeeNumber
-
+							user.isAdmin = teacher_row[0].isAdmin
 							if (room_row[0] != undefined && room_row[0] != null) {
 								user.section = room_row[0].gradeLevel+ ' - ' +room_row[0].section
 							} else {
@@ -314,7 +322,11 @@ module.exports = {
 	addTeacher : function (teacher, cb) {
 		var addUserQuery = 'INSERT INTO user(firstName, lastName, username, password, type) VALUES(?, ?, ?, ?, ?)'
 		var findQuery = 'SELECT * FROM user WHERE username=?'
-		var addTeacherQuery = 'INSERT INTO teacher(employeeNumber, hasClassroom, userId) VALUES(?, ?, ?)'
+		var addTeacherQuery = 'INSERT INTO teacher(employeeNumber, hasClassroom, isAdmin, userId) VALUES(?, ?, ?, ?)'
+		var isAdmin = 0
+		if (teacher.isAdmin) {
+			isAdmin = 1
+		}
 
 		mysqlConnection.query(findQuery, [teacher.username], function (err, rows) {
 			if (rows.length > 0) {
@@ -324,7 +336,7 @@ module.exports = {
 					mysqlConnection.query(addUserQuery, [teacher.firstName, teacher.lastName, teacher.username, hash, 'teacher'], function (err, user) {
 						if (err) console.log(err)
 						mysqlConnection.query(findQuery, [teacher.username], function (err, row) {
-							mysqlConnection.query(addTeacherQuery, [teacher.employeeNumber, 0, row[0].userId], function (err, tea) {
+							mysqlConnection.query(addTeacherQuery, [teacher.employeeNumber, 0, isAdmin, row[0].userId], function (err, tea) {
 								return cb(null, tea.teacherId)
 							})
 						})
@@ -350,8 +362,11 @@ module.exports = {
 	editTeacher : function (teacher, cb) {
 		var checkUsernameQuery = 'SELECT * FROM user WHERE username=? AND userId<>?'
 		var editUserQuery = 'UPDATE user SET lastName=?, firstName=?, username=?, password=? WHERE userId=?'
-		var editTeacherQuery = 'UPDATE teacher SET employeeNumber=?, hasClassroom=? WHERE userId=?'
-
+		var editTeacherQuery = 'UPDATE teacher SET employeeNumber=?, hasClassroom=?, isAdmin=? WHERE userId=?'
+		var isAdmin = 0
+		if (teacher.isAdmin) {
+			isAdmin = 1
+		}
 
 		mysqlConnection.query(checkUsernameQuery, [teacher.username, teacher.userId], function (err, rows) {
 			if (err || rows.length > 0) {
@@ -360,7 +375,7 @@ module.exports = {
 
 				bcrypt.hash(teacher.password, 10, function(err, hash) {
 					mysqlConnection.query(editUserQuery, [teacher.lastName, teacher.firstName, teacher.username, hash, teacher.userId], function (err, res) {
-						mysqlConnection.query(editTeacherQuery, [teacher.employeeNumber, 0, teacher.userId], function (err, res2) {
+						mysqlConnection.query(editTeacherQuery, [teacher.employeeNumber, 0, isAdmin, teacher.userId], function (err, res2) {
 							return cb(null, teacher.userId)
 						})
 					})
@@ -383,7 +398,7 @@ module.exports = {
 							user.nonteachingstaffId = staff_row[0].nonteachingstaffId
 							user.employeeNumber = staff_row[0].employeeNumber
 							user.jobDescription = staff_row[0].jobDescription
-
+							user.isAdmin = staff_row[0].isAdmin
 
 
 							if (facility_row[0] != null && facility_row[0] != undefined) {
@@ -456,7 +471,7 @@ module.exports = {
 							user.nonteachingstaffId = staff_row[0].nonteachingstaffId
 							user.employeeNumber = staff_row[0].employeeNumber
 							user.jobDescription = staff_row[0].jobDescription
-
+							user.isAdmin = staff_row[0].isAdmin
 							
 							if (facility_row[0] != null && facility_row[0] != undefined) {
 								locationId = facility_row[0].locationId
@@ -491,8 +506,11 @@ module.exports = {
 	addStaff : function (staff, cb) {
 		var addUserQuery = 'INSERT INTO user(firstName, lastName, username, password, type) VALUES(?, ?, ?, ?, ?)'
 		var findQuery = 'SELECT * FROM user WHERE username=?'
-		var addStaffQuery = 'INSERT INTO nonteachingstaff(employeeNumber, jobDescription, userId) VALUES(?, ?, ?)'
-
+		var addStaffQuery = 'INSERT INTO nonteachingstaff(employeeNumber, jobDescription, isAdmin, userId) VALUES(?, ?, ?, ?)'
+		var isAdmin
+		if (staff.isAdmin) {
+			isAdmin = 1
+		}
 		mysqlConnection.query(findQuery, [staff.username], function (err, rows) {
 			if (rows.length > 0) {
 				return cb("Staff username already exists.", null)
@@ -500,7 +518,7 @@ module.exports = {
 				bcrypt.hash(staff.password, 10, function(err, hash) {
 					mysqlConnection.query(addUserQuery, [staff.firstName, staff.lastName, staff.username, hash, 'nonteachingstaff'], function (err, user) {
 						mysqlConnection.query(findQuery, [staff.username], function (err, row) {
-							mysqlConnection.query(addStaffQuery, [staff.employeeNumber, staff.jobDescription, row[0].userId], function (err, staff) {
+							mysqlConnection.query(addStaffQuery, [staff.employeeNumber, staff.jobDescription, isAdmin, row[0].userId], function (err, staff) {
 								return cb(null, staff.nonteachingstaffId)
 							})
 						})
@@ -526,8 +544,11 @@ module.exports = {
 	editStaff : function (staff, cb) {
 		var checkUsernameQuery = 'SELECT * FROM user WHERE username=? AND userId<>?'
 		var editUserQuery = 'UPDATE user SET lastName=?, firstName=?, username=?, password=? WHERE userId=?'
-		var editStaffQuery = 'UPDATE nonteachingstaff SET employeeNumber=?, jobDescription=? WHERE userId=?'
-
+		var editStaffQuery = 'UPDATE nonteachingstaff SET employeeNumber=?, jobDescription=?, isAdmin=? WHERE userId=?'
+		var isAdmin
+		if (staff.isAdmin) {
+			isAdmin = 1
+		}
 
 		mysqlConnection.query(checkUsernameQuery, [staff.username, staff.userId], function (err, rows) {
 			if (err || rows.length > 0) {
@@ -536,7 +557,7 @@ module.exports = {
 
 				bcrypt.hash(staff.password, 10, function(err, hash) {
 					mysqlConnection.query(editUserQuery, [staff.lastName, staff.firstName, staff.username, hash, staff.userId], function (err, res) {
-						mysqlConnection.query(editStaffQuery, [staff.employeeNumber, staff.jobDescription, staff.userId], function (err, res2) {
+						mysqlConnection.query(editStaffQuery, [staff.employeeNumber, staff.jobDescription, isAdmin, staff.userId], function (err, res2) {
 							return cb(null, staff.userId)
 						})
 					})
