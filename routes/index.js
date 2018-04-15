@@ -6,6 +6,7 @@ var authenticationController = require(`${__dirname}/../controllers/Authenticati
 var beaconController = require(`${__dirname}/../controllers/BeaconController`); 
 var locationController = require(`${__dirname}/../controllers/LocationController`);
 var userController = require(`${__dirname}/../controllers/userController`);
+var webApiController = require(`${__dirname}/../controllers/webApiController`);
 
 /* GET home page. */
 router.get('/', indexController.getIndexPage)
@@ -74,5 +75,15 @@ router.post('/users/nonteachingstaff/add', authenticationController.authenticate
 router.post('/users/nonteachingstaff/delete/:id', authenticationController.authenticate, userController.deleteStaff)
 router.post('/users/nonteachingstaff/edit', authenticationController.authenticate, userController.getEditStaffPage)
 router.post('/users/nonteachingstaff/edit/:id', authenticationController.authenticate, userController.editStaff)
+
+
+
+
+
+
+// Web API controller
+router.post('/login/web', webApiController.login)
+
+
 
 module.exports = router;
