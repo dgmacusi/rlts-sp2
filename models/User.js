@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 module.exports = {
 
 	authenticateUser : function(user, cb) {
-		var query = 'SELECT username, password FROM user WHERE username=?';
+		var query = 'SELECT * FROM user WHERE username=?';
 
 		mysqlConnection.query(query, [user.username], function (err, rows) {
 			if (err) throw err
