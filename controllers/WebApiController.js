@@ -27,5 +27,41 @@ module.exports = {
 		})
 
 
+	}, 
+	, 
+	getAllBeacons : function (req, res, next) {
+		var getQuery = 'SELECT * FROM beacon'
+		var getLocationQuery = 'SELECT * FROM location WHERE beaconId=?'
+
+		var beaconArray = []
+
+		mysqlConnection.query(getQuery, function (err, beacons) {
+			beacons.forEach(function (beacon, index) {
+				mysqlConnection.query(getLocationQuery, [beacon.beaconId], function (err, location) {
+					if (location[0] != undefined && location[0] != null) {
+						beacon.locationName = location[0].name
+						beacon.type = location[0].type
+					} else {
+						beacon.locationName = "NA"
+						beacon.type = "NA"
+					}
+
+					var b = {
+						locationName : beacon.locationName, 
+						beaconName : beacon.name, 
+						uuid : beacon.uuid, 
+						minor : beacon.minor, 
+						major : beacon.major, 
+						type : beacon.type
+					}
+
+					beaconArray.push(b)
+
+					if (index == beacons.length-1) {
+						return res.json({ beaconArray : beaconArray })
+					}
+				})
+			}) 
+		})
 	}
 }

@@ -82,6 +82,7 @@ router.post('/users/nonteachingstaff/edit/:id', authenticationController.authent
 
 
 // Web API controller
+router.get('/getAllBeacons/web', webApiController.getAllBeacons)
 router.post('/login/web', webApiController.login)
 
 
