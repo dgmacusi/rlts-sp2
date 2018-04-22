@@ -31,8 +31,6 @@ module.exports = {
 	}, 
 	
 	getAllBeacons : function (req, res, next) {
-		console.log("heyyyyyyyyyyyyyyyyyyyyy")
-
 		var getQuery = 'SELECT * FROM beacon'
 		var getLocationQuery = 'SELECT * FROM location WHERE beaconId=?'
 
@@ -61,7 +59,6 @@ module.exports = {
 					beaconArray.push(b)
 
 					if (index == beacons.length-1) {
-						console.log("hello")
 						console.log(beaconArray)
 						res.json({ beaconArray : beaconArray })
 					}
