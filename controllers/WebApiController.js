@@ -13,12 +13,14 @@ module.exports = {
 			if (err) {
 				console.log(err)
 				res.json({ user : {
-					username : null, 
+					username : null,
+					type : null, 
 					authenticated : false
 				}})
 			} else {
 				res.json({ user : {
 					username : user.username, 
+					type : user.type,
 					authenticated : true
 				}})
 			}
