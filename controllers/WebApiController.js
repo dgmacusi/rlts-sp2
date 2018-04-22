@@ -1,5 +1,6 @@
 var User = require(`${__dirname}/../models/User`);
 var Beacon = require(`${__dirname}/../models/Beacon`);
+var mysqlConnection = require(`${__dirname}/../controllers/ConfigurationController`).getDbConnection();
 
 module.exports = {
 	login : function (req, res, next) {
@@ -28,8 +29,10 @@ module.exports = {
 
 
 	}, 
-	, 
+	
 	getAllBeacons : function (req, res, next) {
+		console.log("heyyyyyyyyyyyyyyyyyyyyy")
+
 		var getQuery = 'SELECT * FROM beacon'
 		var getLocationQuery = 'SELECT * FROM location WHERE beaconId=?'
 
@@ -58,7 +61,9 @@ module.exports = {
 					beaconArray.push(b)
 
 					if (index == beacons.length-1) {
-						return res.json({ beaconArray : beaconArray })
+						console.log("hello")
+						console.log(beaconArray)
+						res.json({ beaconArray : beaconArray })
 					}
 				})
 			}) 
