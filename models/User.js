@@ -14,6 +14,7 @@ module.exports = {
 					if (err) throw err
 
 					if (res) {
+						console.log(rows[0])
 						return cb(null, rows[0])
 					} else {
 						return cb('Username and password do not match.', null)

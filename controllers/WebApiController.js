@@ -1,4 +1,5 @@
 var User = require(`${__dirname}/../models/User`);
+var Beacon = require(`${__dirname}/../models/Beacon`);
 
 module.exports = {
 	login : function (req, res, next) {
