@@ -1,5 +1,7 @@
 var User = require(`${__dirname}/../models/User`);
 var Beacon = require(`${__dirname}/../models/Beacon`);
+var Timelog = require(`${__dirname}/../models/Timelog`);
+var mysqlConnection = require(`${__dirname}/../controllers/ConfigurationController`).getDbConnection();
 
 module.exports = {
 	login : function (req, res, next) {
@@ -28,7 +30,6 @@ module.exports = {
 
 
 	}, 
-	, 
 	getAllBeacons : function (req, res, next) {
 		var getQuery = 'SELECT * FROM beacon'
 		var getLocationQuery = 'SELECT * FROM location WHERE beaconId=?'
@@ -58,10 +59,17 @@ module.exports = {
 					beaconArray.push(b)
 
 					if (index == beacons.length-1) {
+						console.log(beaconArray)
 						return res.json({ beaconArray : beaconArray })
 					}
 				})
 			}) 
+		})
+	}, 
+	addTimelog : function (req, res, next) {
+		Timelog.addTimelog(function (err, user) {
+			if (err) throw err;
+			res.json({ success : true })
 		})
 	}
 }
