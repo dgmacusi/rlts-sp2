@@ -60,7 +60,7 @@ module.exports = {
 
 					if (index == beacons.length-1) {
 						console.log(beaconArray)
-						return res.json({ beaconArray : beaconArray })
+						res.json({ beaconArray : beaconArray })
 					}
 				})
 			}) 
