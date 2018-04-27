@@ -25,7 +25,7 @@ module.exports = {
 
 				console.log(timelog)
 
-				mysqlConnection.query(addQuery, [timelog.time, timelog.date, timelog.entryType, locationId, userId, timelog.locatonName, timelog.username], function (err, res) {
+				mysqlConnection.query(addQuery, [timelog.time, timelog.date, timelog.entryType, locationId, userId, timelog.locationName, timelog.username], function (err, res) {
 					if (err) throw err
 					
 					console.log('Timelog added!')
