@@ -193,5 +193,16 @@ module.exports = {
 				return cb('Location name already exists.', facility.name)
 			}
 		})
+	}, 
+	getLocations : function (cb) {
+		var getQuery = 'SELECT * FROM location'
+
+		mysqlConnection.query(getQuery, function (err, rows) {
+			if (rows.length > 0) {
+				return cb(null, rows)
+			} else {
+				return cb('There are no facilities.', null)
+			}
+		})
 	}
 }

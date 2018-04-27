@@ -25,6 +25,80 @@
       </nav>
     </div>
 
+    <br>
+    <div class="row" style="padding-left: 40px; padding-right: 40px; ">
+      <div class="col s4">
+        <a href="/timelogs/add" class="btn-large waves-effect waves-light grey" type="submit" name="action"><i class="material-icons left">add</i>ADD TIMELOG
+          </a>
+      </div>
+      <form method="POST" action="/timelogs/search">
+      <div class="col s8">
+        <div class="row">
+          <div class="input-field col s3">
+            <input placeholder="From Date" type="text" class="datepicker" id="fromDate" name="fromDate">
+            <label for="fromDate">From Date</label>
+          </div>
+          <div class="input-field col s3">
+            <input placeholder="To Date" type="text" class="datepicker" id="toDate" name="toDate">
+            <label for="toDate">To Date</label>
+          </div>
+          <div class="input-field col s4">
+            <input value="search" placeholder="LN, FN, Username, Location" type="text" id="search" name="search">
+            <label for="search">Search Term</label>
+          </div>
+          <div class="input-field col s2">
+            <button type="submit" class="waves-effect waves-light btn"><i class="material-icons">search</i></button>
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+
+    <div class="row" style="padding-left: 50px; padding-right: 50px; ">
+      <table class="bordered highlight responsive-table" style="border: ridge;">
+        <thead class="grey lighten-3">
+          <th style="padding-left: 50px;">ID</th>
+          <th>PERSON</th>
+          <th>USERNAME</th>
+          <th>TIME</th>
+          <th>DATE</th>
+          <th>ENTRY TYPE</th>
+          <th>LOCATION</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <div class="row">
+            <% if (timelogs) { %>
+            <% for(var i=0; i < timelogs.length; i++) { %>
+
+              <form method="POST" action="/">
+                <input type="hidden" value="<%= timelogs[i].timelogId%>" id="timelogId" name="timelogId">
+                <input type="hidden" value="<%= timelogs[i].entryType%>" id="entryType" name="entryType">
+                <input type="hidden" value="<%= timelogs[i].locationName%>" id="locationName" name="locationName">
+                <input type="hidden" value="<%= timelogs[i].locationId%>" id="locationId" name="locationId">
+                <input type="hidden" value="<%= timelogs[i].userId%>" id="userId" name="userId">
+                <input type="hidden" value="<%= timelogs[i].username%>" id="username" name="username">
+                <input type="hidden" value="<%= timelogs[i].fullName%>" id="fullName" name="fullName">
+
+                <tr>
+                  <td style="padding-left: 50px;"><%= timelogs[i].timelogId %></td>
+                  <td><%= timelogs[i].fullName %></td>
+                  <td><%= timelogs[i].username %></td>
+                  <td><%= timelogs[i].time %></td>
+                  <td><%= timelogs[i].date %></td>
+                  <td><%= timelogs[i].entryType %></td>
+                  <td><%= timelogs[i].locationName %></td>
+                  
+                  <td><button type="submit" class="right" formaction="/timelogs/delete/<%= timelogs[i].timelogId%>"><i class="small material-icons">delete</i></button></td>
+                </tr>
+              </form>
+            <% } %>
+            <% } %>
+          </div>
+        </tbody>
+      </table>
+    </div>
+
     <ul id="slide-out" class="side-nav">
       <li>
         <div class="app-logo">
@@ -46,7 +120,7 @@
           <li><a href="/location/classroom">Classroom</a></li>
           <li><a href="/location/facility">Facility</a></li>
         </ul>
-      <li><a class="white-text grey" href="timelogs"><i class="material-icons">access_time</i>TIMELOGS</a></li>      
+      <li><a class="white-text grey" href="/timelogs"><i class="material-icons">access_time</i>TIMELOGS</a></li>      
     </ul>
   </body>
 </html>

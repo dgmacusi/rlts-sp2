@@ -7,6 +7,7 @@ var beaconController = require(`${__dirname}/../controllers/BeaconController`);
 var locationController = require(`${__dirname}/../controllers/LocationController`);
 var userController = require(`${__dirname}/../controllers/userController`);
 var webApiController = require(`${__dirname}/../controllers/webApiController`);
+var timelogController = require(`${__dirname}/../controllers/TimelogController`);
 
 /* GET home page. */
 router.get('/', indexController.getIndexPage)
@@ -19,7 +20,7 @@ router.get('/users/administrator', authenticationController.authenticate, userCo
 router.get('/users/student', authenticationController.authenticate, userController.getStudentPage)
 router.get('/users/teacher', authenticationController.authenticate, userController.getTeacherPage)
 router.get('/users/nonteaching', authenticationController.authenticate, userController.getStaffPage)
-router.get('/timelogs', authenticationController.authenticate, indexController.getTimelogPage)
+router.get('/timelogs', authenticationController.authenticate, timelogController.getTimelogPage)
 router.get('/users', authenticationController.authenticate, indexController.getUserPage)
 router.get('/beacons/add', authenticationController.authenticate, indexController.getAddBeaconPage)
 router.get('/signout', authenticationController.authenticate, authenticationController.signout)
@@ -77,14 +78,20 @@ router.post('/users/nonteachingstaff/edit', authenticationController.authenticat
 router.post('/users/nonteachingstaff/edit/:id', authenticationController.authenticate, userController.editStaff)
 
 
+router.get('/timelogs/add', authenticationController.authenticate, timelogController.getAddTimelogPage)
 
-
+router.post('/timelogs/add', authenticationController.authenticate, timelogController.addTimelog)
+router.post('/timelogs/delete/:id', authenticationController.authenticate, timelogController.deleteTimelog)
+router.post('/timelogs/search', authenticationController.authenticate, timelogController.searchTimelog)
 
 
 // Web API controller
 router.get('/getAllBeacons/web', webApiController.getAllBeacons)
 router.post('/login/web', webApiController.login)
 router.post('/addTimelog/web', webApiController.addTimelog)
+router.post('/getStudentTeacherTimelog/web', webApiController.getStudentTeacherTimelog)
+router.post('/getClassroomTimelog/web', webApiController.getClassroomTimelog)
+router.post('/getFacilityTimelog/web', webApiController.getFacilityTimelog)
 
 
 

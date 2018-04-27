@@ -33,5 +33,245 @@ module.exports = {
 				})
 			})
 		})
+	}, 
+
+	addOneTimelog : function (timelog, cb) {
+		var addQuery = 'INSERT INTO timelog (time, date, entryType, locationId, userId, locationName, username) VALUES (?, ?, ?, ?, ?, ?, ?)'
+	
+		console.log(timelog.userId)
+		console.log(timelog.locationId)
+
+
+		var user = JSON.parse(timelog.userId)
+		var location = JSON.parse(timelog.locationId)
+
+
+
+		mysqlConnection.query(addQuery, [timelog.time, timelog.date, timelog.entryType, location.locationId, user.userId, location.locationName, user.username], function (err, res) {
+			if (err) throw err
+			
+			console.log('Timelog added!')
+			return cb(null, timelog)
+		})
+	},
+
+	getTimelogs : function (cb) {
+		var getQuery = 'SELECT * FROM timelog ORDER BY date DESC'
+		var getUserQuery = 'SELECT * FROM user WHERE username=?'
+
+		mysqlConnection.query(getQuery, function (err, rows) {
+			if (rows.length > 0) {
+				rows.forEach(function (row, index) {
+					var dateString = row.date
+					dateString = new Date(dateString).toUTCString();
+					dateString = dateString.split(' ').slice(0, 4).join(' ')
+					row.date = dateString
+
+					mysqlConnection.query(getUserQuery, [row.username], function (err, user_row) {
+						if (user_row[0] != null && user_row[0] != undefined) {
+							row.fullName = user_row[0].lastName + ", " + user_row[0].firstName
+						} else {
+							row.fullName = "NA"
+						}
+
+						if (index == rows.length-1) {
+							return cb(null, rows)
+						}
+					})
+				})
+			} else {
+				return cb('No timelogs', null)
+			}
+		})
+	}, 
+	deleteTimelog : function (timelogId, cb) {
+		var deleteTimelogQuery = 'DELETE FROM timelog WHERE timelogId=?'
+		mysqlConnection.query(deleteTimelogQuery, [timelogId], function (err, res) {
+			if (err) throw err;
+
+			return cb(null, timelogId)
+		})
+	}, 
+	searchTimelog : function (search, cb) {
+		var searchQuery = 'SELECT * FROM timelog WHERE date BETWEEN ? AND ? ORDER BY date DESC'
+		var userQuery = 'SELECT * FROM user WHERE userId=?'
+		var jsonArray = []
+
+		console.log(search.fromDate + search.toDate+search.search)
+
+		mysqlConnection.query(searchQuery, [search.fromDate, search.toDate], function (err, rows) {
+			if (rows.length) {
+				console.log(rows.length+ " LENGTH")
+				rows.forEach(function (row, index) {
+					mysqlConnection.query(userQuery, [row.userId], function (err, user_row) {
+						if (user_row[0] != null && user_row[0] != undefined) {
+							if (user_row[0].firstName.toLowerCase().indexOf(search.search.toLowerCase()) != -1 || user_row[0].lastName.toLowerCase().indexOf(search.search.toLowerCase()) != -1 || user_row[0].username.toLowerCase().indexOf(search.search.toLowerCase()) != -1) {
+								var dateString = row.date
+								dateString = new Date(dateString).toUTCString();
+								dateString = dateString.split(' ').slice(0, 4).join(' ')
+								row.date = dateString
+								row.fullName = user_row[0].lastName + ', ' + user_row[0].firstName
+
+								jsonArray.push(row)
+							}
+						}
+
+
+
+						if (index == rows.length-1) {
+							return cb(null, jsonArray)
+						}
+					})
+				})
+			} else {
+				return cb('No timelogs found', null)
+			}
+		})
+	}, 
+	getStudentTeacherTimelog : function (search, cb) {
+		var searchQuery = 'SELECT * FROM timelog WHERE date=? ORDER BY date DESC'
+		var studentQuery = 'SELECT * FROM student WHERE userId=? AND studentNumber=?'
+		var teacherQuery = 'SELECT * FROM teacher WHERE userId=? AND employeeNumber=?'
+		var staffQuery = 'SELECT * FROM nonteachingstaff WHERE userId=? AND employeeNumber=?'
+		var adminQuery = 'SELECT * FROM administrator WHERE userId=? AND employeeNumber=?'
+		var jsonArray = []
+
+		console.log(search)
+
+
+		mysqlConnection.query(searchQuery, [search.date], function (err, rows) {
+			if (rows.length) {
+				rows.forEach(function (row, index) {
+					mysqlConnection.query(studentQuery, [row.userId, search.studentTeacherNo], function (err, student_row) {
+						if (student_row[0] != null && student_row[0] != undefined) {
+							var dateString = row.date
+							dateString = new Date(dateString).toUTCString();
+							dateString = dateString.split(' ').slice(0, 4).join(' ')
+							row.date = dateString
+							row.fullName = student_row[0].lastName + ', ' + student_row[0].firstName
+
+							jsonArray.push(row)
+						}
+
+						mysqlConnection.query(teacherQuery, [row.userId, search.studentTeacherNo], function (err, teacher_row) {
+							if (teacher_row[0] != null && teacher_row[0] != undefined) {
+								var dateString = row.date
+								dateString = new Date(dateString).toUTCString();
+								dateString = dateString.split(' ').slice(0, 4).join(' ')
+								row.date = dateString
+								row.fullName = teacher_row[0].lastName + ', ' + teacher_row[0].firstName
+
+								jsonArray.push(row)
+							}
+							mysqlConnection.query(staffQuery, [row.userId, search.studentTeacherNo], function (err, staff_row) {
+								if (staff_row[0] != null && staff_row[0] != undefined) {
+									var dateString = row.date
+									dateString = new Date(dateString).toUTCString();
+									dateString = dateString.split(' ').slice(0, 4).join(' ')
+									row.date = dateString
+									row.fullName = staff_row[0].lastName + ', ' + staff_row[0].firstName
+
+									jsonArray.push(row)
+								}
+								mysqlConnection.query(adminQuery, [row.userId, search.studentTeacherNo], function (err, admin_row) {
+									if (admin_row[0] != null && admin_row[0] != undefined) {
+										var dateString = row.date
+										dateString = new Date(dateString).toUTCString();
+										dateString = dateString.split(' ').slice(0, 4).join(' ')
+										row.date = dateString
+										row.fullName = admin_row[0].lastName + ', ' + admin_row[0].firstName
+
+										jsonArray.push(row)
+
+									}
+
+									if (index == rows.length-1) {
+										return cb(null, jsonArray)
+									}
+								})
+						})
+							})
+					})
+				})
+			} else {
+				return cb('No timelogs found', null)
+			}
+		})
+	}, 
+	getClassroomTimelog : function (search, cb) {
+		var searchQuery = 'SELECT * FROM timelog WHERE date=? ORDER BY date DESC'
+		var classroomQuery = 'SELECT * FROM classroom WHERE gradeLevel=? AND section=?'
+		var userQuery = 'SELECT * FROM user WHERE userId=?'
+		var jsonArray = []
+
+		mysqlConnection.query(searchQuery, [search.date], function (err, rows) {
+			if (rows.length) {
+				rows.forEach(function (row, index) {
+					mysqlConnection.query(classroomQuery, [parseInt(search.gradeLevel), search.section], function (err, classroom_row) {
+						if (classroom_row[0] != null && classroom_row[0] != undefined) {
+							var dateString = row.date
+							dateString = new Date(dateString).toUTCString();
+							dateString = dateString.split(' ').slice(0, 4).join(' ')
+							row.date = dateString
+							
+							mysqlConnection.query(userQuery, [row.userId], function (err, user_row) {
+								if (user_row[0] != null && user_row[0] != undefined) {
+									row.fullName = user_row[0].lastName + ", " + user_row[0].firstName 
+								} else {
+									row.fullName = 'NA'
+								}
+
+								jsonArray.push(row)
+							})
+						}
+
+
+						if (index == rows.length-1) {
+							return cb(null, jsonArray)
+						}
+					})
+				})
+			} else {
+				return cb('No timelogs found', null)
+			}
+		})
+	}, 
+	getFacilityTimelog : function (search, cb) {
+		var searchQuery = 'SELECT * FROM timelog WHERE date=? ORDER BY date DESC'
+		var facilityQuery = 'SELECT * FROM location WHERE name=? AND type=?'
+		var userQuery = 'SELECT * FROM user WHERE userId=?'
+		var jsonArray = []
+
+		mysqlConnection.query(searchQuery, [search.date], function (err, rows) {
+			if (rows.length) {
+				rows.forEach(function (row, index) {
+					mysqlConnection.query(facilityQuery, [search.roomName, 'facility'], function (err, facility_row) {
+						if (facility_row[0] != null && facility_row[0] != undefined) {
+							var dateString = row.date
+							dateString = new Date(dateString).toUTCString();
+							dateString = dateString.split(' ').slice(0, 4).join(' ')
+							row.date = dateString
+							
+							mysqlConnection.query(userQuery, [row.userId], function (err, user_row) {
+								if (user_row[0] != null && user_row[0] != undefined) {
+									row.fullName = user_row[0].lastName + ", " + user_row[0].firstName 
+								} else {
+									row.fullName = 'NA'
+								}
+
+								jsonArray.push(row)
+							})
+						}
+
+
+						if (index == rows.length-1) {
+							return cb(null, jsonArray)
+						}
+					})
+				})
+			} else {
+				return cb('No timelogs found', null)
+			}
+		})
 	}
 }

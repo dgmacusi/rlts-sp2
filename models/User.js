@@ -565,6 +565,17 @@ module.exports = {
 				})
 			}
 		})
+	}, 
+	getUsers : function (cb) {
+		var getQuery = 'SELECT * FROM user'
+
+		mysqlConnection.query(getQuery, function (err, rows) {
+			if (rows.length > 0) {
+				return cb(null, rows)
+			} else {
+				return cb('There are no users.', null)
+			}
+		})
 	}
 }
 
