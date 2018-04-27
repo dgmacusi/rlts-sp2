@@ -2,7 +2,7 @@ var mysqlConnection = require(`${__dirname}/../controllers/ConfigurationControll
 
 module.exports = {
 	addTimelog : function (timelog, cb) {
-		var addQuery = 'INSERT INTO timelog (time, date, entryType, locationId, userId) VALUES (?, ?, ?, ?, ?)'
+		var addQuery = 'INSERT INTO timelog (time, date, entryType, locationId, userId, locatonName, username) VALUES (?, ?, ?, ?, ?, ?, ?)'
 		var searchLocation = 'SELECT * FROM location WHERE name=?' 
 		var searchUser = 'SELECT * FROM user WHERE username=?'
 
@@ -16,15 +16,16 @@ module.exports = {
 				locationId = null
 			}
 
-			mysqlConnection.query(searchUser, [timelog.username], function (user_row) {
-				userId = user_row[0].userId
+			mysqlConnection.query(searchUser, [timelog.username], function (err, user_row) {
 				if (user_row[0] != null && user_row[0] != undefined) {
 					userId = user_row[0].userId
 				} else {
 					userId = null
 				}
 
-				mysqlConnection.query(addQuery, [timelog.time, timelog.date, timelog.entryType, locationId, userId], function (err, res) {
+				console.log(timelog)
+
+				mysqlConnection.query(addQuery, [timelog.time, timelog.date, timelog.entryType, locationId, userId, timelog.locatonName, timelog.username], function (err, res) {
 					if (err) throw err
 					
 					console.log('Timelog added!')
@@ -33,3 +34,4 @@ module.exports = {
 			})
 		})
 	}
+}

@@ -67,7 +67,7 @@ module.exports = {
 		})
 	}, 
 	addTimelog : function (req, res, next) {
-		Timelog.addTimelog(function (err, user) {
+		Timelog.addTimelog(req.body, function (err, user) {
 			if (err) throw err;
 			res.json({ success : true })
 		})
