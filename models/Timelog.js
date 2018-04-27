@@ -2,7 +2,7 @@ var mysqlConnection = require(`${__dirname}/../controllers/ConfigurationControll
 
 module.exports = {
 	addTimelog : function (timelog, cb) {
-		var addQuery = 'INSERT INTO timelog (time, date, entryType, locationId, userId, locatonName, username) VALUES (?, ?, ?, ?, ?, ?, ?)'
+		var addQuery = 'INSERT INTO timelog (time, date, entryType, locationId, userId, locationName, username) VALUES (?, ?, ?, ?, ?, ?, ?)'
 		var searchLocation = 'SELECT * FROM location WHERE name=?' 
 		var searchUser = 'SELECT * FROM user WHERE username=?'
 
