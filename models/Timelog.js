@@ -129,11 +129,12 @@ module.exports = {
 		})
 	}, 
 	getStudentTeacherTimelog : function (search, cb) {
-		var searchQuery = 'SELECT * FROM timelog WHERE date=? ORDER BY date DESC'
+		var searchQuery = 'SELECT * FROM timelog WHERE DATE(date)=? ORDER BY date DESC'
 		var studentQuery = 'SELECT * FROM student WHERE userId=? AND studentNumber=?'
 		var teacherQuery = 'SELECT * FROM teacher WHERE userId=? AND employeeNumber=?'
 		var staffQuery = 'SELECT * FROM nonteachingstaff WHERE userId=? AND employeeNumber=?'
 		var adminQuery = 'SELECT * FROM administrator WHERE userId=? AND employeeNumber=?'
+		var userQuery = 'SELECT * FROM user WHERE userId=?'
 		var jsonArray = []
 
 		console.log(search)
@@ -142,55 +143,57 @@ module.exports = {
 		mysqlConnection.query(searchQuery, [search.date], function (err, rows) {
 			if (rows.length) {
 				rows.forEach(function (row, index) {
-					mysqlConnection.query(studentQuery, [row.userId, search.studentTeacherNo], function (err, student_row) {
-						if (student_row[0] != null && student_row[0] != undefined) {
-							var dateString = row.date
-							dateString = new Date(dateString).toUTCString();
-							dateString = dateString.split(' ').slice(0, 4).join(' ')
-							row.date = dateString
-							row.fullName = student_row[0].lastName + ', ' + student_row[0].firstName
 
-							jsonArray.push(row)
+					mysqlConnection.query(userQuery, [row.userId], function (err, user_row) {
+						if (user_row[0] != null && user_row[0] != undefined) {
+							row.fullName = user_row[0].lastName + ', ' + user_row[0].firstName
 						}
-
-						mysqlConnection.query(teacherQuery, [row.userId, search.studentTeacherNo], function (err, teacher_row) {
-							if (teacher_row[0] != null && teacher_row[0] != undefined) {
+						mysqlConnection.query(studentQuery, [row.userId, search.studentTeacherNo], function (err, student_row) {
+							if (student_row[0] != null && student_row[0] != undefined) {
 								var dateString = row.date
 								dateString = new Date(dateString).toUTCString();
 								dateString = dateString.split(' ').slice(0, 4).join(' ')
 								row.date = dateString
-								row.fullName = teacher_row[0].lastName + ', ' + teacher_row[0].firstName
 
 								jsonArray.push(row)
 							}
-							mysqlConnection.query(staffQuery, [row.userId, search.studentTeacherNo], function (err, staff_row) {
-								if (staff_row[0] != null && staff_row[0] != undefined) {
+
+							mysqlConnection.query(teacherQuery, [row.userId, search.studentTeacherNo], function (err, teacher_row) {
+								if (teacher_row[0] != null && teacher_row[0] != undefined) {
 									var dateString = row.date
 									dateString = new Date(dateString).toUTCString();
 									dateString = dateString.split(' ').slice(0, 4).join(' ')
 									row.date = dateString
-									row.fullName = staff_row[0].lastName + ', ' + staff_row[0].firstName
 
 									jsonArray.push(row)
 								}
-								mysqlConnection.query(adminQuery, [row.userId, search.studentTeacherNo], function (err, admin_row) {
-									if (admin_row[0] != null && admin_row[0] != undefined) {
+								mysqlConnection.query(staffQuery, [row.userId, search.studentTeacherNo], function (err, staff_row) {
+									if (staff_row[0] != null && staff_row[0] != undefined) {
 										var dateString = row.date
 										dateString = new Date(dateString).toUTCString();
 										dateString = dateString.split(' ').slice(0, 4).join(' ')
 										row.date = dateString
-										row.fullName = admin_row[0].lastName + ', ' + admin_row[0].firstName
 
 										jsonArray.push(row)
-
 									}
+									mysqlConnection.query(adminQuery, [row.userId, search.studentTeacherNo], function (err, admin_row) {
+										if (admin_row[0] != null && admin_row[0] != undefined) {
+											var dateString = row.date
+											dateString = new Date(dateString).toUTCString();
+											dateString = dateString.split(' ').slice(0, 4).join(' ')
+											row.date = dateString
 
-									if (index == rows.length-1) {
-										return cb(null, jsonArray)
-									}
+											jsonArray.push(row)
+
+										}
+
+										if (index == rows.length-1) {
+											return cb(null, jsonArray)
+										}
+									})
 								})
-						})
 							})
+						})
 					})
 				})
 			} else {
