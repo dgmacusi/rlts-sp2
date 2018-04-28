@@ -151,7 +151,7 @@ module.exports = {
 						mysqlConnection.query(studentQuery, [row.userId, search.studentTeacherNo], function (err, student_row) {
 							if (student_row[0] != null && student_row[0] != undefined) {
 								var dateString = row.date
-								dateString = new Date(dateString).toUTCString();
+								dateString = new Date(dateString).toString();
 								dateString = dateString.split(' ').slice(0, 4).join(' ')
 								row.date = dateString
 
@@ -161,7 +161,7 @@ module.exports = {
 							mysqlConnection.query(teacherQuery, [row.userId, search.studentTeacherNo], function (err, teacher_row) {
 								if (teacher_row[0] != null && teacher_row[0] != undefined) {
 									var dateString = row.date
-									dateString = new Date(dateString).toUTCString();
+									dateString = new Date(dateString).toString();
 									dateString = dateString.split(' ').slice(0, 4).join(' ')
 									row.date = dateString
 
@@ -170,7 +170,7 @@ module.exports = {
 								mysqlConnection.query(staffQuery, [row.userId, search.studentTeacherNo], function (err, staff_row) {
 									if (staff_row[0] != null && staff_row[0] != undefined) {
 										var dateString = row.date
-										dateString = new Date(dateString).toUTCString();
+										dateString = new Date(dateString).toString();
 										dateString = dateString.split(' ').slice(0, 4).join(' ')
 										row.date = dateString
 
@@ -179,15 +179,17 @@ module.exports = {
 									mysqlConnection.query(adminQuery, [row.userId, search.studentTeacherNo], function (err, admin_row) {
 										if (admin_row[0] != null && admin_row[0] != undefined) {
 											var dateString = row.date
-											dateString = new Date(dateString).toUTCString();
+											dateString = new Date(dateString).toString();
 											dateString = dateString.split(' ').slice(0, 4).join(' ')
 											row.date = dateString
-
+											console.log(row.date)
 											jsonArray.push(row)
 
 										}
 
 										if (index == rows.length-1) {
+											console.log(jsonArray)
+											console.log(search.date)
 											return cb(null, jsonArray)
 										}
 									})
