@@ -215,7 +215,7 @@ module.exports = {
 					mysqlConnection.query(classroomQuery, [parseInt(search.gradeLevel), search.section], function (err, classroom_row) {
 						if (classroom_row[0] != null && classroom_row[0] != undefined) {
 							var dateString = row.date
-							dateString = new Date(dateString).toUTCString();
+							dateString = new Date(dateString).toString();
 							dateString = dateString.split(' ').slice(0, 4).join(' ')
 							row.date = dateString
 							
@@ -253,7 +253,7 @@ module.exports = {
 					mysqlConnection.query(facilityQuery, [search.roomName, 'facility'], function (err, facility_row) {
 						if (facility_row[0] != null && facility_row[0] != undefined) {
 							var dateString = row.date
-							dateString = new Date(dateString).toUTCString();
+							dateString = new Date(dateString).toString();
 							dateString = dateString.split(' ').slice(0, 4).join(' ')
 							row.date = dateString
 							
