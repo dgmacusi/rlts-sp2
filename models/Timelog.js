@@ -129,7 +129,7 @@ module.exports = {
 		})
 	}, 
 	getStudentTeacherTimelog : function (search, cb) {
-		var searchQuery = 'SELECT * FROM timelog WHERE DATE(date)=? ORDER BY date DESC'
+		var searchQuery = 'SELECT * FROM timelog WHERE DATE(date)=? ORDER BY time DESC'
 		var studentQuery = 'SELECT * FROM student WHERE userId=? AND studentNumber=?'
 		var teacherQuery = 'SELECT * FROM teacher WHERE userId=? AND employeeNumber=?'
 		var staffQuery = 'SELECT * FROM nonteachingstaff WHERE userId=? AND employeeNumber=?'
@@ -182,14 +182,12 @@ module.exports = {
 											dateString = new Date(dateString).toString();
 											dateString = dateString.split(' ').slice(0, 4).join(' ')
 											row.date = dateString
-											console.log(row.date)
 											jsonArray.push(row)
 
 										}
 
 										if (index == rows.length-1) {
 											console.log(jsonArray)
-											console.log(search.date)
 											return cb(null, jsonArray)
 										}
 									})
@@ -204,7 +202,7 @@ module.exports = {
 		})
 	}, 
 	getClassroomTimelog : function (search, cb) {
-		var searchQuery = 'SELECT * FROM timelog WHERE date=? ORDER BY date DESC'
+		var searchQuery = 'SELECT * FROM timelog WHERE DATE(date)=? ORDER BY time DESC'
 		var classroomQuery = 'SELECT * FROM classroom WHERE gradeLevel=? AND section=?'
 		var userQuery = 'SELECT * FROM user WHERE userId=?'
 		var jsonArray = []
@@ -213,9 +211,10 @@ module.exports = {
 			if (rows.length) {
 				rows.forEach(function (row, index) {
 					mysqlConnection.query(classroomQuery, [parseInt(search.gradeLevel), search.section], function (err, classroom_row) {
+						console.log(classroom_row.length)
 						if (classroom_row[0] != null && classroom_row[0] != undefined) {
 							var dateString = row.date
-							dateString = new Date(dateString).toUTCString();
+							dateString = new Date(dateString).toString();
 							dateString = dateString.split(' ').slice(0, 4).join(' ')
 							row.date = dateString
 							
@@ -227,12 +226,14 @@ module.exports = {
 								}
 
 								jsonArray.push(row)
+
+								if (index == rows.length-1) {
+									console.log(jsonArray)
+									console.log(rows.length)
+									console.log(rows)
+									return cb(null, jsonArray)
+								}
 							})
-						}
-
-
-						if (index == rows.length-1) {
-							return cb(null, jsonArray)
 						}
 					})
 				})
@@ -242,7 +243,7 @@ module.exports = {
 		})
 	}, 
 	getFacilityTimelog : function (search, cb) {
-		var searchQuery = 'SELECT * FROM timelog WHERE date=? ORDER BY date DESC'
+		var searchQuery = 'SELECT * FROM timelog WHERE date=? ORDER BY time DESC'
 		var facilityQuery = 'SELECT * FROM location WHERE name=? AND type=?'
 		var userQuery = 'SELECT * FROM user WHERE userId=?'
 		var jsonArray = []
@@ -253,7 +254,7 @@ module.exports = {
 					mysqlConnection.query(facilityQuery, [search.roomName, 'facility'], function (err, facility_row) {
 						if (facility_row[0] != null && facility_row[0] != undefined) {
 							var dateString = row.date
-							dateString = new Date(dateString).toUTCString();
+							dateString = new Date(dateString).toString();
 							dateString = dateString.split(' ').slice(0, 4).join(' ')
 							row.date = dateString
 							
@@ -265,12 +266,11 @@ module.exports = {
 								}
 
 								jsonArray.push(row)
+
+								if (index == rows.length-1) {
+									return cb(null, jsonArray)
+								}
 							})
-						}
-
-
-						if (index == rows.length-1) {
-							return cb(null, jsonArray)
 						}
 					})
 				})
