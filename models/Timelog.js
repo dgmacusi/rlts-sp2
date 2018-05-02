@@ -95,6 +95,7 @@ module.exports = {
 	searchTimelog : function (search, cb) {
 		var searchQuery = 'SELECT * FROM timelog WHERE date BETWEEN ? AND ? ORDER BY date DESC'
 		var userQuery = 'SELECT * FROM user WHERE userId=?'
+		var locationQuery = 'SELECT * FROM location WHERE locationId=?'
 		var jsonArray = []
 
 		console.log(search.fromDate + search.toDate+search.search)
@@ -113,10 +114,16 @@ module.exports = {
 								row.fullName = user_row[0].lastName + ', ' + user_row[0].firstName
 
 								jsonArray.push(row)
+							} else if (row.locationName.toLowerCase().indexOf(search.search.toLowerCase()) != -1) {
+								var dateString = row.date
+								dateString = new Date(dateString).toUTCString();
+								dateString = dateString.split(' ').slice(0, 4).join(' ')
+								row.date = dateString
+								row.fullName = user_row[0].lastName + ', ' + user_row[0].firstName
+
+								jsonArray.push(row)
 							}
 						}
-
-
 
 						if (index == rows.length-1) {
 							return cb(null, jsonArray)
