@@ -229,8 +229,6 @@ module.exports = {
 
 								if (index == rows.length-1) {
 									console.log(jsonArray)
-									console.log(rows.length)
-									console.log(rows)
 									return cb(null, jsonArray)
 								}
 							})
@@ -268,6 +266,7 @@ module.exports = {
 								jsonArray.push(row)
 
 								if (index == rows.length-1) {
+									console.log(jsonArray)
 									return cb(null, jsonArray)
 								}
 							})
