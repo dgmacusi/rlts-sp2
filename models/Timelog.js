@@ -210,17 +210,17 @@ module.exports = {
 	}, 
 	getClassroomTimelog : function (search, cb) {
 		var searchQuery = 'SELECT * FROM timelog WHERE DATE(date)=? ORDER BY time DESC'
-		var classroomQuery = 'SELECT * FROM classroom WHERE locationId=?'
+		var classroomQuery = 'SELECT * FROM classroom WHERE locationId=? AND gradeLevel=? AND section=?'
 		var userQuery = 'SELECT * FROM user WHERE userId=?'
 		var jsonArray = []
 
 		mysqlConnection.query(searchQuery, [search.date], function (err, rows) {
 			if (rows.length) {
 				rows.forEach(function (row, index) {
-					mysqlConnection.query(classroomQuery, [row.locationId], function (err, classroom_row) {
+					mysqlConnection.query(classroomQuery, [row.locationId, parseInt(search.gradeLevel), search.section], function (err, classroom_row) {
 						console.log(classroom_row.length)
 						
-						if (classroom_row[0] != null && classroom_row[0] != undefined && classroom_row[0].gradeLevel == parseInt(search.gradeLevel) && classroom_row[0].section == search.section) {
+						if (classroom_row[0] != null && classroom_row[0] != undefined) {
 							var dateString = row.date
 							dateString = new Date(dateString).toString();
 							dateString = dateString.split(' ').slice(0, 4).join(' ')
