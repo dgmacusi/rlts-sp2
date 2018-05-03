@@ -229,23 +229,24 @@ module.exports = {
 							mysqlConnection.query(userQuery, [row.userId], function (err, user_row) {
 								if (user_row[0] != null && user_row[0] != undefined) {
 									row.fullName = user_row[0].lastName + ", " + user_row[0].firstName 
+									jsonArray.push(row)
+
+									if (index == rows.length-1) {
+										console.log("first if")
+										return cb(null, jsonArray)
+									}
 								} else {
 									row.fullName = 'NA'
-								}
-
-								jsonArray.push(row)
-
-								if (index == rows.length-1) {
-									console.log(jsonArray)
-									console.log(rows.length)
-									console.log(rows)
-									return cb(null, jsonArray)
+									jsonArray.push(row)
+									
+									if (index == rows.length-1) {
+										console.log("second if")
+										return cb(null, jsonArray)
+									}
 								}
 							})
 						} else if (index == rows.length-1) {
-							console.log(jsonArray)
-							console.log(rows.length)
-							console.log(rows)
+							console.log("third if")
 							return cb(null, jsonArray)
 						}
 					})
@@ -265,28 +266,36 @@ module.exports = {
 			if (rows.length) {
 				rows.forEach(function (row, index) {
 					mysqlConnection.query(facilityQuery, [row.locationId], function (err, facility_row) {
-						if (facility_row[0] != null && facility_row[0] != undefined && facility_row[0].name == search.roomName && facility_row[0].type == 'facility') {
+						if (facility_row[0] != null && facility_row[0] != undefined && facility_row[0].name == search.roomName) {
 							var dateString = row.date
 							dateString = new Date(dateString).toString();
 							dateString = dateString.split(' ').slice(0, 4).join(' ')
 							row.date = dateString
-							
+
 							mysqlConnection.query(userQuery, [row.userId], function (err, user_row) {
 								if (user_row[0] != null && user_row[0] != undefined) {
 									row.fullName = user_row[0].lastName + ", " + user_row[0].firstName 
+									jsonArray.push(row)
+									
+									if (index == rows.length-1) {
+										console.log("first if")
+										return cb(null, jsonArray)
+									}
 								} else {
 									row.fullName = 'NA'
+									jsonArray.push(row)
+									if (index == rows.length-1) {
+										console.log("second if")
+										return cb(null, jsonArray)
+									}
 								}
 
-								jsonArray.push(row)
+								
 
-								if (index == rows.length-1) {
-									console.log(rows.length)
-									return cb(null, jsonArray)
-								}
+								
 							})
 						} else if (index == rows.length-1) {
-							console.log(rows.length)
+							console.log("third if")
 							return cb(null, jsonArray)
 						}
 					})
