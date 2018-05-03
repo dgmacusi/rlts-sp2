@@ -257,15 +257,15 @@ module.exports = {
 	}, 
 	getFacilityTimelog : function (search, cb) {
 		var searchQuery = 'SELECT * FROM timelog WHERE date=? ORDER BY time DESC'
-		var facilityQuery = 'SELECT * FROM location WHERE name=? AND type=?'
+		var facilityQuery = 'SELECT * FROM location WHERE locationId=?'
 		var userQuery = 'SELECT * FROM user WHERE userId=?'
 		var jsonArray = []
 
 		mysqlConnection.query(searchQuery, [search.date], function (err, rows) {
 			if (rows.length) {
 				rows.forEach(function (row, index) {
-					mysqlConnection.query(facilityQuery, [search.roomName, 'facility'], function (err, facility_row) {
-						if (facility_row[0] != null && facility_row[0] != undefined) {
+					mysqlConnection.query(facilityQuery, [row.locationId], function (err, facility_row) {
+						if (facility_row[0] != null && facility_row[0] != undefined && facility_row[0].name == search.roomName && facility_row[0].type == 'facility') {
 							var dateString = row.date
 							dateString = new Date(dateString).toString();
 							dateString = dateString.split(' ').slice(0, 4).join(' ')
@@ -284,6 +284,8 @@ module.exports = {
 									return cb(null, jsonArray)
 								}
 							})
+						} else if (index == rows.length-1) {
+							return cb(null, jsonArray)
 						}
 					})
 				})
