@@ -218,8 +218,6 @@ module.exports = {
 			if (rows.length) {
 				rows.forEach(function (row, index) {
 					mysqlConnection.query(classroomQuery, [row.locationId], function (err, classroom_row) {
-						console.log(classroom_row.length)
-						
 						if (classroom_row[0] != null && classroom_row[0] != undefined && classroom_row[0].gradeLevel == parseInt(search.gradeLevel) && classroom_row[0].section == search.section) {
 							var dateString = row.date
 							dateString = new Date(dateString).toString();
@@ -242,8 +240,6 @@ module.exports = {
 							})
 						} else if (index == rows.length-1) {
 							console.log(jsonArray)
-							console.log(rows.length)
-							console.log(rows)
 							return cb(null, jsonArray)
 						}
 					})
