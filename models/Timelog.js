@@ -256,7 +256,7 @@ module.exports = {
 		})
 	}, 
 	getFacilityTimelog : function (search, cb) {
-		var searchQuery = 'SELECT * FROM timelog WHERE date=? ORDER BY time DESC'
+		var searchQuery = 'SELECT * FROM timelog WHERE DATE(date)=?	 ORDER BY time DESC'
 		var facilityQuery = 'SELECT * FROM location WHERE locationId=?'
 		var userQuery = 'SELECT * FROM user WHERE userId=?'
 		var jsonArray = []
@@ -281,10 +281,12 @@ module.exports = {
 								jsonArray.push(row)
 
 								if (index == rows.length-1) {
+									console.log(rows.length)
 									return cb(null, jsonArray)
 								}
 							})
 						} else if (index == rows.length-1) {
+							console.log(rows.length)
 							return cb(null, jsonArray)
 						}
 					})
