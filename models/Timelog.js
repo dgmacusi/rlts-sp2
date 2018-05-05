@@ -210,15 +210,17 @@ module.exports = {
 	}, 
 	getClassroomTimelog : function (search, cb) {
 		var searchQuery = 'SELECT * FROM timelog WHERE DATE(date)=? ORDER BY time DESC'
-		var classroomQuery = 'SELECT * FROM classroom WHERE locationId=?'
+		var classroomQuery = 'SELECT * FROM classroom WHERE locationId=? AND gradeLevel=? AND section=?'
 		var userQuery = 'SELECT * FROM user WHERE userId=?'
 		var jsonArray = []
 
 		mysqlConnection.query(searchQuery, [search.date], function (err, rows) {
 			if (rows.length) {
 				rows.forEach(function (row, index) {
-					mysqlConnection.query(classroomQuery, [row.locationId], function (err, classroom_row) {
-						if (classroom_row[0] != null && classroom_row[0] != undefined && classroom_row[0].gradeLevel == parseInt(search.gradeLevel) && classroom_row[0].section == search.section) {
+					mysqlConnection.query(classroomQuery, [row.locationId, parseInt(search.gradeLevel), search.section], function (err, classroom_row) {
+						console.log(classroom_row.length)
+						
+						if (classroom_row[0] != null && classroom_row[0] != undefined) {
 							var dateString = row.date
 							dateString = new Date(dateString).toString();
 							dateString = dateString.split(' ').slice(0, 4).join(' ')
@@ -227,19 +229,24 @@ module.exports = {
 							mysqlConnection.query(userQuery, [row.userId], function (err, user_row) {
 								if (user_row[0] != null && user_row[0] != undefined) {
 									row.fullName = user_row[0].lastName + ", " + user_row[0].firstName 
+									jsonArray.push(row)
+
+									if (index == rows.length-1) {
+										console.log("first if")
+										return cb(null, jsonArray)
+									}
 								} else {
 									row.fullName = 'NA'
-								}
-
-								jsonArray.push(row)
-
-								if (index == rows.length-1) {
-									console.log(jsonArray)
-									return cb(null, jsonArray)
+									jsonArray.push(row)
+									
+									if (index == rows.length-1) {
+										console.log("second if")
+										return cb(null, jsonArray)
+									}
 								}
 							})
 						} else if (index == rows.length-1) {
-							console.log(jsonArray)
+							console.log("third if")
 							return cb(null, jsonArray)
 						}
 					})
@@ -259,28 +266,32 @@ module.exports = {
 			if (rows.length) {
 				rows.forEach(function (row, index) {
 					mysqlConnection.query(facilityQuery, [row.locationId], function (err, facility_row) {
-						if (facility_row[0] != null && facility_row[0] != undefined && facility_row[0].name == search.roomName && facility_row[0].type == 'facility') {
+						if (facility_row[0] != null && facility_row[0] != undefined && facility_row[0].name == search.roomName) {
 							var dateString = row.date
 							dateString = new Date(dateString).toString();
 							dateString = dateString.split(' ').slice(0, 4).join(' ')
 							row.date = dateString
-							
+
 							mysqlConnection.query(userQuery, [row.userId], function (err, user_row) {
 								if (user_row[0] != null && user_row[0] != undefined) {
 									row.fullName = user_row[0].lastName + ", " + user_row[0].firstName 
+									jsonArray.push(row)
+									
+									if (index == rows.length-1) {
+										console.log("first if")
+										return cb(null, jsonArray)
+									}
 								} else {
 									row.fullName = 'NA'
-								}
-
-								jsonArray.push(row)
-
-								if (index == rows.length-1) {
-									console.log(jsonArray)
-									return cb(null, jsonArray)
+									jsonArray.push(row)
+									if (index == rows.length-1) {
+										console.log("second if")
+										return cb(null, jsonArray)
+									}
 								}
 							})
 						} else if (index == rows.length-1) {
-							console.log(rows.length)
+							console.log("third if")
 							return cb(null, jsonArray)
 						}
 					})

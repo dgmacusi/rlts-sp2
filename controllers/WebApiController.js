@@ -74,18 +74,16 @@ module.exports = {
 	}, 
 	getStudentTeacherTimelog : function (req, res, next) {
 		Timelog.getStudentTeacherTimelog(req.body, function (err, timelogArray) {
-			res.json({ timelogArray : timelogArray })
+			res.json({ timelogArray : timelrogArray })
 		})
 	}, 
 	getClassroomTimelog : function (req, res, next) {
 		Timelog.getClassroomTimelog(req.body, function (err, timelogArray) {
-			if (err) throw err;
 			res.json({ timelogArray : timelogArray })
 		})
 	},
 	getFacilityTimelog : function (req, res, next) {
 		Timelog.getFacilityTimelog(req.body, function (err, timelogArray) {
-			if (err) throw err;
 			res.json({ timelogArray : timelogArray })
 		})
 	}
