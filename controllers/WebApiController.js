@@ -42,9 +42,11 @@ module.exports = {
 					if (location[0] != undefined && location[0] != null) {
 						beacon.locationName = location[0].name
 						beacon.type = location[0].type
+						beacon.locationId = location[0].locationId
 					} else {
 						beacon.locationName = "NA"
 						beacon.type = "NA"
+						beacon.locationId = "NA"
 					}
 
 					var b = {
@@ -53,7 +55,8 @@ module.exports = {
 						uuid : beacon.uuid, 
 						minor : beacon.minor, 
 						major : beacon.major, 
-						type : beacon.type
+						type : beacon.type, 
+						locationId : beacon.locationId
 					}
 
 					beaconArray.push(b)
