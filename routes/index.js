@@ -92,7 +92,7 @@ router.post('/addTimelog/web', webApiController.addTimelog)
 router.post('/getStudentTeacherTimelog/web', webApiController.getStudentTeacherTimelog)
 router.post('/getClassroomTimelog/web', webApiController.getClassroomTimelog)
 router.post('/getFacilityTimelog/web', webApiController.getFacilityTimelog)
-
+router.post('/sendNotification/web', webApiController.addNotification)
 
 
 module.exports = router;
