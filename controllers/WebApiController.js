@@ -56,7 +56,7 @@ module.exports = {
 						minor : beacon.minor, 
 						major : beacon.major, 
 						type : beacon.type, 
-						locationId : beacon.locationId
+						locationId : beacon.locationId,
 						beaconId : beacon.beaconId
 					}
 
