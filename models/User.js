@@ -4,9 +4,12 @@ const bcrypt = require('bcrypt');
 module.exports = {
 
 	authenticateUser : function(user, cb) {
-		var query = 'SELECT * FROM user WHERE username=? AND isAdmin=?';
+		var query = 'SELECT * FROM user WHERE username=? AND (type="teacher" OR type="administrator" OR type="nonteachingstaff")';
+		var queryAdmin = 'SELECT * FROM administrator WHERE userId=?'
+		var queryTea = 'SELECT * FROM teacher WHERE userId=?'
+		var queryNon = 'SELECT * FROM nonteachingstaff WHERE userId=?'
 
-		mysqlConnection.query(query, [user.username, 1], function (err, rows) {
+		mysqlConnection.query(query, [user.username], function (err, rows) {
 			if (err) throw err
 
 			if (rows.length) {
@@ -14,8 +17,25 @@ module.exports = {
 					if (err) throw err
 
 					if (res) {
-						console.log(rows[0])
-						return cb(null, rows[0])
+						mysqlConnection.query(queryAdmin, [rows[0].userId], function (err, admin) {
+							if (admin[0] != null && admin[0] != undefined && admin[0].isAdmin == 1) {
+								return cb(null, rows[0])
+							} else {
+								mysqlConnection.query(queryTea, [rows[0].userId], function (err, tea) {
+									if (tea[0] != null && tea[0] != undefined && tea[0].isAdmin == 1) {
+										return cb(null, rows[0])
+									} else {
+										mysqlConnection.query(queryNon, [rows[0].userId], function (err, non) {
+											if (non[0] != null && non[0] != undefined && non[0].isAdmin == 1) {
+												return cb(null, rows[0])
+											} else {
+												return cb('No username found.', null)
+											}
+										})
+									}
+								})
+							}
+						})
 					} else {
 						return cb('Username and password do not match.', null)
 					} 
