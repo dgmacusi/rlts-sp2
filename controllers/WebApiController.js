@@ -1,6 +1,7 @@
 var User = require(`${__dirname}/../models/User`);
 var Beacon = require(`${__dirname}/../models/Beacon`);
 var Timelog = require(`${__dirname}/../models/Timelog`);
+var Notification = require(`${__dirname}/../models/Notification`);
 var mysqlConnection = require(`${__dirname}/../controllers/ConfigurationController`).getDbConnection();
 
 module.exports = {
@@ -56,7 +57,7 @@ module.exports = {
 						minor : beacon.minor, 
 						major : beacon.major, 
 						type : beacon.type, 
-						locationId : beacon.locationId
+						locationId : beacon.locationId,
 						beaconId : beacon.beaconId
 					}
 
@@ -89,6 +90,11 @@ module.exports = {
 	getFacilityTimelog : function (req, res, next) {
 		Timelog.getFacilityTimelog(req.body, function (err, timelogArray) {
 			res.json({ timelogArray : timelogArray })
+		})
+	}, 
+	addNotification : function (req, res, next) {
+		Notification.addNotification(req.body, function (err, notification) {
+			res.json({ success : true })
 		})
 	}
 }
