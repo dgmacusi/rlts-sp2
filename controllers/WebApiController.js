@@ -57,6 +57,7 @@ module.exports = {
 						major : beacon.major, 
 						type : beacon.type, 
 						locationId : beacon.locationId
+						beaconId : beacon.beaconId
 					}
 
 					beaconArray.push(b)
