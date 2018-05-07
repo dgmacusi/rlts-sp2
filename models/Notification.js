@@ -9,6 +9,7 @@ module.exports = {
 		var userId = ''
 
 		console.log(beaconIdArray)
+		console.log(notif)
 
 		mysqlConnection.query(findUser, [notif.username], function (err, user) {
 			if (user[0] != null && user[0] != undefined) {
