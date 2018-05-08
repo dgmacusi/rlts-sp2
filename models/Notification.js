@@ -30,25 +30,36 @@ module.exports = {
 	}, 
 	getAllNotifications : function (cb) {
 		var getQuery = 'SELECT * FROM notification WHERE DATE(date)=?'
+		var userQuery = 'SELECT * FROM user WHERE userId=?'
 		var notifArray = []
 
 		mysqlConnection.query(getQuery, [new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)], function (err, rows) {
 			if (!(err) && rows.length > 0) {
 				rows.forEach(function (row, index) {
-					var n = {
-						notificationId : row.notificationId, 
-						title : row.title, 
-						body : row.body, 
-						beaconId : row.beaconId, 
-						userId : row.userId
-					}
 
-					notifArray.push(n)
-					
-					if (index == rows.length-1) {
-						console.log(notifArray)
-						return cb(null, notifArray)
-					}
+					mysqlConnection.query(userQuery, [row.userId], function (err, user) {
+						if (user[0] != null && user[0] != undefined) {
+							row.sender = user[0].lastName + ', ' + user[0].firstName 
+						} else {
+							row.sender = 'NA'
+						}
+
+						var n = {
+							notificationId : row.notificationId, 
+							title : row.title, 
+							body : row.body, 
+							beaconId : row.beaconId, 
+							sender : row.sender
+						}
+
+						notifArray.push(n)
+						
+						if (index == rows.length-1) {
+							console.log(notifArray)
+							return cb(null, notifArray)
+						}
+
+					})
 				})
 			} else {
 				return cb("No notifications found", null)
