@@ -96,5 +96,10 @@ module.exports = {
 		Notification.addNotification(req.body, function (err, notification) {
 			res.json({ success : true })
 		})
+	}, 
+	getAllNotifications : function (req, res, next) {
+		Notification.getAllNotifications(function (err, notificationArray) {
+			res.json({ notificationArray : notificationArray })
+		})
 	}
 }

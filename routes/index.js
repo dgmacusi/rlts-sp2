@@ -87,6 +87,7 @@ router.post('/timelogs/search', authenticationController.authenticate, timelogCo
 
 // Web API controller
 router.get('/getAllBeacons/web', webApiController.getAllBeacons)
+router.get('/getAllNotifications/web', webApiController.getAllNotifications)
 router.post('/login/web', webApiController.login)
 router.post('/addTimelog/web', webApiController.addTimelog)
 router.post('/getStudentTeacherTimelog/web', webApiController.getStudentTeacherTimelog)
