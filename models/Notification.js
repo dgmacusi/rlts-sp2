@@ -33,7 +33,7 @@ module.exports = {
 		var notifArray = []
 
 		mysqlConnection.query(getQuery, [new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)], function (err, rows) {
-			if (rows != null && rows != undefined) {
+			if (!(err) && rows.length > 0) {
 				rows.forEach(function (row, index) {
 					var n = {
 						notificationId : row.notificationId, 
@@ -53,10 +53,6 @@ module.exports = {
 			} else {
 				return cb("No notifications found", null)
 			}
-
-
-
-			
 		})
 
 	}
