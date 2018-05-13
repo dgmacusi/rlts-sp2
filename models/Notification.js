@@ -2,7 +2,7 @@ var mysqlConnection = require(`${__dirname}/../controllers/ConfigurationControll
 
 module.exports = {
 	addNotification : function (notif, cb) {
-		var addQuery = 'INSERT INTO notification(title, body, hasAttachment, userId, beaconId, date) VALUE(?,?,?,?,?,?)'
+		var addQuery = 'INSERT INTO notification(title, body, hasAttachment, userId, beaconId, date, downloadLink) VALUE(?,?,?,?,?,?, ?)'
 		var findUser = 'SELECT * FROM user WHERE username=?'
 
 		var beaconIdArray = notif.send_to.split(",");
@@ -19,7 +19,7 @@ module.exports = {
 			}
 
 			beaconIdArray.forEach(function (beaconId, index) {
-				mysqlConnection.query(addQuery, [notif.title, notif.body, 0, userId, beaconId, new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)], function (err, row) {
+				mysqlConnection.query(addQuery, [notif.title, notif.body, 0, userId, beaconId, new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2), notif.downloadLink], function (err, row) {
 					if (index == beaconIdArray.length-1) {
 						return cb(null, beaconId)
 					} 	
@@ -49,7 +49,8 @@ module.exports = {
 							title : row.title, 
 							body : row.body, 
 							beaconId : row.beaconId, 
-							sender : row.sender
+							sender : row.sender, 
+							downloadLink : row.downloadLink
 						}
 
 						notifArray.push(n)
