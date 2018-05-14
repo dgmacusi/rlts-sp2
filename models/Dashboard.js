@@ -116,7 +116,7 @@ module.exports = {
 						}
 
 						if (index == rows.length-1) {
-							return cb(null, { data : data })
+							return cb(null, { data : data , date : fromDate.split('-')[0] +'-'+ (parseInt(fromDate.split('-')[1]))+'-'+ fromDate.split('-')[2] + ' to ' + toDate.split('-')[0] +'-'+ (parseInt(toDate.split('-')[1]))+'-'+ toDate.split('-')[2]})
 						}
 					})
 				})
