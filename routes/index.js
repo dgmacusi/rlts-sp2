@@ -8,11 +8,11 @@ var locationController = require(`${__dirname}/../controllers/LocationController
 var userController = require(`${__dirname}/../controllers/userController`);
 var webApiController = require(`${__dirname}/../controllers/webApiController`);
 var timelogController = require(`${__dirname}/../controllers/TimelogController`);
+var dashboardController = require(`${__dirname}/../controllers/DashboardController`);
 
 /* GET home page. */
 router.get('/', indexController.getIndexPage)
 router.get('/login', indexController.getLoginPage)
-router.get('/home', authenticationController.authenticate, indexController.getHomePage)
 router.get('/beacons', authenticationController.authenticate, beaconController.getBeaconPage)
 router.get('/location/classroom', authenticationController.authenticate, locationController.getClassroomPage)
 router.get('/location/facility', authenticationController.authenticate, locationController.getFacilityPage) 
@@ -84,6 +84,8 @@ router.post('/timelogs/add', authenticationController.authenticate, timelogContr
 router.post('/timelogs/delete/:id', authenticationController.authenticate, timelogController.deleteTimelog)
 router.post('/timelogs/search', authenticationController.authenticate, timelogController.searchTimelog)
 
+// Dashboard Controller
+router.get('/home', authenticationController.authenticate, dashboardController.getHomePage)
 
 // Web API controller
 router.get('/getAllBeacons/web', webApiController.getAllBeacons)

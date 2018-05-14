@@ -7,6 +7,9 @@
     <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
     <script type="text/javascript" src="/javascripts/materialize.min.js"></script>
     <script type="text/javascript" src="/javascripts/script.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/heatmap.js"></script>
+    <script src="https://code.highcharts.com/modules/treemap.js"></script>
   </head>
   <body>
     <div class="navbar-fixed">
@@ -26,12 +29,59 @@
 
     <div id="dashboard" name="dashboard">
       <div id="statistics" name="statistics" class="row">
-        <div class="col s1 center">
-          <h3>10</h3>
+        <div class="col s1 center top-stat">
+          <h3><%= statistics.userSize%></h3>
           Total Users
         </div>
+        <div class="col s1 center top-stat">
+          <h3><%= statistics.studentSize%></h3>
+          Total Students
+        </div>
+        <div class="col s1 center top-stat">
+          <h3><%= statistics.adminSize%></h3>
+          Total Administrators
+        </div>
+        <div class="col s1 center top-stat">
+          <h3><%= statistics.teacherSize%></h3>
+          Total Teachers
+        </div>
+        <div class="col s1 center top-stat">
+          <h3><%= statistics.nonSize%></h3>
+          Total Nonteaching
+        </div>
+        <div class="col s1 center top-stat">
+          <h3><%= statistics.locationSize%></h3>
+          Total Locations
+        </div>
+        <div class="col s1 center top-stat">
+          <h3><%= statistics.classroomSize%></h3>
+          Total Classrooms
+        </div>
+        <div class="col s1 center top-stat">
+          <h3><%= statistics.facilitySize%></h3>
+          Total Facilities
+        </div>
+        
       </div>
       <hr>
+      <div id="first-charts" class="row">
+        <div class="col s7">
+          <div id="heatmap" style="width:100%; height:400px;"></div>
+        </div>
+        <div class="col s5">
+          <div id="top-locations" style="width:100%; height:400px;"></div>
+        </div>
+      </div>
+      <div id="second-charts" class="row">
+        <div class="col s7">
+          <div id="system-activity" style="width:100%; height:400px;"></div>
+        </div>
+        <div class="col s5">
+          <div id="location-activity" style="width:100%; height:400px;"></div>
+        </div>
+        
+      </div>
+      
     </div>
 
 
@@ -59,4 +109,203 @@
       <li><a href="/timelogs"><i class="material-icons">access_time</i>TIMELOGS</a></li>      
     </ul>
   </body>
+  <script type="text/javascript">
+    // LINE GRAPH
+    $.ajax({
+        url: "",
+        type: 'GET',
+        success: function(res) {
+            systemActivity("yeah")
+        }
+    });
+
+    var systemActivity = function (yeah) {
+      Highcharts.chart('system-activity', {
+          xAxis: {
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+          },
+
+          series: [{
+              data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 1000, 148.5, 216.4, 194.1, 95.6, 54.4]
+          }], 
+          title : {
+            text : "System Activity"
+          }
+      });
+    }
+
+    $.ajax({
+        url: "",
+        type: 'GET',
+        success: function(res) {
+            topLocations("yeah")
+        }
+    });
+    // BAR GRAPH
+    var topLocations = function (yeah) {
+      Highcharts.chart('top-locations', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Monthly Average Rainfall'
+        },
+        subtitle: {
+            text: 'Source: WorldClimate.com'
+        },
+        xAxis: {
+            categories: [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May'
+            ],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Rainfall (mm)'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Enter',
+            data: [49.9, 71.5, 106.4, 129.2, 144.0]
+
+        }, {
+            name: 'Exit',
+            data: [83.6, 78.8, 98.5, 93.4, 106.0]
+
+        }]
+    });
+    }
+
+    $.ajax({
+        url: "",
+        type: 'GET',
+        success: function(res) {
+            locationActivity("yeah")
+        }
+    });
+
+    var locationActivity = function (yeah) {
+      Highcharts.chart('location-activity', {
+          chart: {
+              plotBackgroundColor: null,
+              plotBorderWidth: null,
+              plotShadow: false,
+              type: 'pie'
+          },
+          title: {
+              text: 'Browser market shares in January, 2018'
+          },
+          tooltip: {
+              pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          },
+          plotOptions: {
+              pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  dataLabels: {
+                      enabled: false
+                  },
+                  showInLegend: true
+              }
+          },
+          series: [{
+              name: 'Brands',
+              colorByPoint: true,
+              data: [{
+                  name: 'Chrome',
+                  y: 61.41,
+                  sliced: true,
+                  selected: true
+              }, {
+                  name: 'Internet Explorer',
+                  y: 11.84
+              }, {
+                  name: 'Firefox',
+                  y: 10.85
+              }, {
+                  name: 'Edge',
+                  y: 4.67
+              }, {
+                  name: 'Safari',
+                  y: 4.18
+              }, {
+                  name: 'Other',
+                  y: 7.05
+              }]
+          }]
+      });
+    }
+
+    $.ajax({
+        url: "",
+        type: 'GET',
+        success: function(res) {
+            heatMap("yeah")
+        }
+    });
+
+    var heatMap = function (yeah) {
+      Highcharts.chart('heatmap', {
+          colorAxis: {
+              minColor: '#FFFFFF',
+              maxColor: Highcharts.getOptions().colors[0]
+          },
+          series: [{
+              type: 'treemap',
+              layoutAlgorithm: 'squarified',
+              data: [{
+                  name: 'A',
+                  value: 6,
+                  colorValue: 1
+              }, {
+                  name: 'B',
+                  value: 6,
+                  colorValue: 2
+              }, {
+                  name: 'C',
+                  value: 4,
+                  colorValue: 3
+              }, {
+                  name: 'D',
+                  value: 3,
+                  colorValue: 4
+              }, {
+                  name: 'E',
+                  value: 2,
+                  colorValue: 5
+              }, {
+                  name: 'F',
+                  value: 2,
+                  colorValue: 6
+              }, {
+                  name: 'G',
+                  value: 1,
+                  colorValue: 7
+              }]
+          }],
+          title: {
+              text: 'Highcharts Treemap'
+          }
+      });
+    }
+  </script>
 </html>
