@@ -23,6 +23,7 @@ module.exports = {
 			} else {
 				studentSize = 0;
 			}
+			console.log('Students: ' + studentSize)
 
 			mysqlConnection.query(teacherQuery, function (err, teachers) {
 				if (teachers) {
@@ -30,6 +31,7 @@ module.exports = {
 				} else {
 					teacherSize = 0;
 				}
+				console.log('Teachers: ' + teacherSize)
 
 				mysqlConnection.query(administratorQuery, function (err, admins) {
 					if (admins) {
@@ -37,6 +39,7 @@ module.exports = {
 					} else {
 						adminSize = 0;
 					}
+					console.log('Admins: ' + adminSize)
 
 					mysqlConnection.query(nonteachingstaffQuery, function (err, nons) {
 						if (nons) {
@@ -44,6 +47,7 @@ module.exports = {
 						} else {
 							nonSize = 0;
 						}
+						console.log('Non: ' + nonSize)
 
 						mysqlConnection.query(classroomQuery, function (err, classrooms) {
 							if (classrooms) {
@@ -51,6 +55,7 @@ module.exports = {
 							} else {
 								classroomSize = 0;
 							}
+							console.log('Classrooms: ' + classroomSize)
 
 							mysqlConnection.query(facilityQuery, function (err, facilities) {
 								if (facilities) {
@@ -58,6 +63,7 @@ module.exports = {
 								} else {
 									facilitySize = 0;
 								}
+								console.log('Facilities: ' + facilitySize)
 
 								var statistics = {
 									studentSize : studentSize, 
@@ -69,6 +75,7 @@ module.exports = {
 									locationSize : classroomSize + facilitySize, 
 									userSize : studentSize + teacherSize + adminSize + nonSize
 								}
+								console.log(statistics)
 
 								return cb(null, statistics)
 
