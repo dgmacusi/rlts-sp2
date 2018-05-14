@@ -67,5 +67,63 @@ module.exports = {
 				})
 			})
 		})
+	}, 
+	getSystemActivity : function (fromDate, toDate, cb) {
+		var query = 'SELECT COUNT(*) AS count FROM timelog WHERE DATE(date)=?' 
+		var categories = []
+		var values = []
+
+		var from = new Date(fromDate.split('-')[0], parseInt(fromDate.split('-')[1]) - 1, fromDate.split('-')[2])
+		var to = new Date(toDate.split('-')[0], parseInt(toDate.split('-')[1]) - 1, toDate.split('-')[2])
+		var now = new Date();
+		var daysOfYear = [];
+
+
+		for (var d = from; d <= to; d.setDate(d.getDate() + 1)) {
+		    categories.push(new Date(d).getFullYear() + '-' + (new Date(d).getMonth() + 1) + '-' + new Date(d).getDate());
+		}
+
+		categories.forEach(function (row, index) {
+			mysqlConnection.query(query, [row], function (err, logs) {
+				if (logs[0] != null && logs[0] != undefined) {
+					values.push(logs[0].count)
+				}
+
+				if (index == categories.length-1) {
+					return cb(null, { categories : categories , values : values })
+				}
+			})
+		})
+
+	}, 
+	getLocationActivity : function (fromDate, toDate, cb) {
+		var facilityQuery = 'SELECT * FROM location WHERE type="facility"'
+		var selectQuery = 'SELECT COUNT(*) AS count FROM timelog WHERE locationId=? AND date BETWEEN ? AND ?'
+
+		var from = new Date(fromDate.split('-')[0], parseInt(fromDate.split('-')[1]) - 1, fromDate.split('-')[2])
+		var to = new Date(toDate.split('-')[0], parseInt(toDate.split('-')[1]) - 1, toDate.split('-')[2])
+		var data = []
+
+		mysqlConnection.query(facilityQuery, function (err, rows) {
+			if (rows.length > 0) {
+				rows.forEach(function (row, index) {
+					mysqlConnection.query(selectQuery, [row.locationId, from, to], function (err, count) {
+						if (count[0] != null && count[0] != undefined) {
+							data.push({y : count[0].count, name : row.name})
+						}
+						else {
+							data.push({y : 0, name : row.name})
+						}
+
+						if (index == rows.length-1) {
+							return cb(null, { data : data })
+						}
+					})
+				})
+			} else {
+				return cb("No data.", null)
+			}
+		})
 	}
+	
 }
