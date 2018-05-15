@@ -133,24 +133,27 @@
     $('#date-button').on('click', function (e) {
       $.ajax({
         url: "http://127.0.0.1:3000/dashboard/systemactivity2",
-        type: 'GET',
-        dataType: 'json'
+        type: 'POST',
+        dataType: 'json', 
+        data: { fromDate : $('#fromDate').val(), toDate : $('#toDate').val() }
       }).done(function (data) {
         systemActivity(data)
       });
 
       $.ajax({
         url: "http://127.0.0.1:3000/dashboard/toplocations2",
-        type: 'GET',
-        dataType: 'json'
+        type: 'POST',
+        dataType: 'json', 
+        data: { fromDate : $('#fromDate').val(), toDate : $('#toDate').val() }
       }).done(function (data) {
         topLocations(data)
       });
 
       $.ajax({
         url: "http://127.0.0.1:3000/dashboard/locationactivity2",
-        type: 'GET',
-        dataType: 'json'
+        type: 'POST',
+        dataType: 'json', 
+        data: { fromDate : $('#fromDate').val(), toDate : $('#toDate').val() }
       }).done(function (data) {
         locationActivity(data)
       });
