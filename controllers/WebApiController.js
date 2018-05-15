@@ -12,7 +12,7 @@ module.exports = {
 			password : req.body.password
 		}
 		
-		User.authenticateUser(user, function (err, user) {
+		User.authUser(user, function (err, user) {
 			if (err) {
 				console.log(err)
 				res.json({ user : {
