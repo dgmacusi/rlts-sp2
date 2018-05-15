@@ -188,7 +188,7 @@ module.exports = {
 
 								if (index == rows.length-1) {
 									dataHolder.sort(function(a, b){
-									    return b.average - a.average;
+									    return b.count - a.count;
 									});
 
 									var counts = []
