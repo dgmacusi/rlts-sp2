@@ -22,7 +22,7 @@ module.exports = {
 				return cb('No username found.', null)
 			}
 		})
-	}
+	},
 	authenticateUser : function(user, cb) {
 		var query = 'SELECT * FROM user WHERE username=? AND (type="teacher" OR type="administrator" OR type="nonteachingstaff")';
 		var queryAdmin = 'SELECT * FROM administrator WHERE userId=?'
