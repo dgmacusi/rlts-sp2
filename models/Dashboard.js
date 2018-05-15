@@ -173,7 +173,7 @@ module.exports = {
 										sum = sum + value[j]
 									}
 
-									average = sum/value.length
+									average = Math.abs(sum/value.length)
 
 								}
 
