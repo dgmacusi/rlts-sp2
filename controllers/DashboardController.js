@@ -26,5 +26,10 @@ module.exports = {
 		Dashboard.getLocationActivity(from, to, function (err, output) {
 			res.json(output)
 		})
+	}, 
+	getHeatmap : function (req, res, next) {
+		Dashboard.getHeatmap(function (err, output) {
+			res.json(output)
+		})
 	}
 }

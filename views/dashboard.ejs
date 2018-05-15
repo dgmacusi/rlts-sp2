@@ -10,6 +10,10 @@
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/heatmap.js"></script>
     <script src="https://code.highcharts.com/modules/treemap.js"></script>
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/modules/tilemap.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
   </head>
   <body>
     <div class="navbar-fixed">
@@ -82,18 +86,18 @@
       <hr>
       <div id="first-charts" class="row">
         <div class="col s7">
-          <div id="heatmap" style="width:100%; height:400px;"></div>
+          <div id="heatmap" ></div>
         </div>
         <div class="col s5">
-          <div id="top-locations" style="width:100%; height:400px;"></div>
+          <div id="top-locations" ></div>
         </div>
       </div>
       <div id="second-charts" class="row">
         <div class="col s7">
-          <div id="system-activity" style="width:100%; height:400px;"></div>
+          <div id="system-activity" ></div>
         </div>
         <div class="col s5">
-          <div id="location-activity" style="width:100%; height:400px;"></div>
+          <div id="location-activity" ></div>
         </div>
         
       </div>
@@ -252,56 +256,79 @@
     }
 
     $.ajax({
-        url: "",
+        url: "http://127.0.0.1:3000/dashboard/heatmap",
         type: 'GET',
-        success: function(res) {
-            heatMap("yeah")
-        }
+        dataType: 'json'
+    }).done(function (data) {
+      heatMap(data)
     });
 
-    var heatMap = function (yeah) {
+    var heatMap = function (data) {
       Highcharts.chart('heatmap', {
-          colorAxis: {
-              minColor: '#FFFFFF',
-              maxColor: Highcharts.getOptions().colors[0]
-          },
-          series: [{
-              type: 'treemap',
-              layoutAlgorithm: 'squarified',
-              data: [{
-                  name: 'A',
-                  value: 6,
-                  colorValue: 1
-              }, {
-                  name: 'B',
-                  value: 6,
-                  colorValue: 2
-              }, {
-                  name: 'C',
-                  value: 4,
-                  colorValue: 3
-              }, {
-                  name: 'D',
-                  value: 3,
-                  colorValue: 4
-              }, {
-                  name: 'E',
-                  value: 2,
-                  colorValue: 5
-              }, {
-                  name: 'F',
-                  value: 2,
-                  colorValue: 6
-              }, {
-                  name: 'G',
-                  value: 1,
-                  colorValue: 7
-              }]
-          }],
-          title: {
-              text: 'Highcharts Treemap'
-          }
-      });
+        chart: {
+            type: 'tilemap',
+            marginTop: -20,
+        },
+
+        title: {
+            text: 'Idea map'
+        },
+
+
+        colors: [
+            Highcharts.getOptions().colors[0],
+            '#bbdefb'
+        ],
+
+        xAxis: {
+            visible: false
+        },
+
+        yAxis: {
+            visible: false
+        },
+
+        legend: {
+            enabled: false
+        },
+
+        tooltip: {
+            headerFormat: '',
+            backgroundColor: 'rgba(247,247,247,0.95)',
+            pointFormat: '<span style="color: {point.color}">●</span>' +
+                '<span style="font-size: 13px; font-weight: bold"> {point.name}' +
+                '</span><br>{point.desc}',
+            style: {
+                width: 170
+            },
+            padding: 10,
+            hideDelay: 1000000
+        },
+
+        plotOptions: {
+            series: {
+                keys: ['x', 'y', 'name', 'desc'],
+                tileShape: 'square',
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}',
+                    color: '#000000',
+                    style: {
+                        textOutline: false
+                    }
+                }
+            }
+        },
+
+        series: [{
+            name: 'Steps',
+            colorByPoint: true, // Pick new color for each point from colors array
+            data: data.data
+        }]
+    }, function (chart) {
+        chart.tooltip.refresh(chart.series[0].points[0]); // Show tooltip of the first point on load
+    });
+
     }
   </script>
 </html>

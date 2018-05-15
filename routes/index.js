@@ -88,6 +88,7 @@ router.post('/timelogs/search', authenticationController.authenticate, timelogCo
 router.get('/home', authenticationController.authenticate, dashboardController.getHomePage)
 router.get('/dashboard/systemactivity', dashboardController.getSystemActivity)
 router.get('/dashboard/locationactivity', dashboardController.getLocationActivity)
+router.get('/dashboard/heatmap', dashboardController.getHeatmap)
 
 // Web API controller
 router.get('/getAllBeacons/web', webApiController.getAllBeacons)
