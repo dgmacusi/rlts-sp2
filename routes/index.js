@@ -70,7 +70,7 @@ router.post('/users/teacher/edit', authenticationController.authenticate, userCo
 router.post('/users/teacher/edit/:id', authenticationController.authenticate, userController.editTeacher)
 
 router.get('/users/nonteachingstaff/add', authenticationController.authenticate, userController.getAddStaffPage)
-
+	
 router.post('/users/nonteachingstaff/search', authenticationController.authenticate, userController.searchStaff)
 router.post('/users/nonteachingstaff/add', authenticationController.authenticate, userController.addStaff)
 router.post('/users/nonteachingstaff/delete/:id', authenticationController.authenticate, userController.deleteStaff)
@@ -89,6 +89,7 @@ router.get('/home', authenticationController.authenticate, dashboardController.g
 router.get('/dashboard/systemactivity', dashboardController.getSystemActivity)
 router.get('/dashboard/locationactivity', dashboardController.getLocationActivity)
 router.get('/dashboard/heatmap', dashboardController.getHeatmap)
+router.get('/dashboard/toplocations', dashboardController.getTopLocations)
 
 // Web API controller
 router.get('/getAllBeacons/web', webApiController.getAllBeacons)

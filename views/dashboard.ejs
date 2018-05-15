@@ -144,6 +144,11 @@
           xAxis: {
               categories: data.categories
           },
+          yAxis: {
+            title: {
+                text: 'Number of Logs'
+            }
+          }, 
 
           series: [{
               data: data.values
@@ -155,44 +160,35 @@
     }
 
     $.ajax({
-        url: "",
+        url: "http://127.0.0.1:3000/dashboard/toplocations",
         type: 'GET',
-        success: function(res) {
-            topLocations("yeah")
-        }
+        dataType: 'json'
+    }).done(function (data) {
+      topLocations(data)
     });
     // BAR GRAPH
-    var topLocations = function (yeah) {
+    var topLocations = function (data) {
       Highcharts.chart('top-locations', {
         chart: {
             type: 'column'
         },
         title: {
-            text: 'Monthly Average Rainfall'
-        },
-        subtitle: {
-            text: 'Source: WorldClimate.com'
+            text: 'Top 5 Locations'
         },
         xAxis: {
-            categories: [
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'May'
-            ],
+            categories: data.name,
             crosshair: true
         },
         yAxis: {
             min: 0,
             title: {
-                text: 'Rainfall (mm)'
+                text: ''
             }
         },
         tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
             footerFormat: '</table>',
             shared: true,
             useHTML: true
@@ -204,15 +200,15 @@
             }
         },
         series: [{
-            name: 'Enter',
-            data: [49.9, 71.5, 106.4, 129.2, 144.0]
+            name: 'Enter and Exit (logs)',
+            data: data.count
 
         }, {
-            name: 'Exit',
-            data: [83.6, 78.8, 98.5, 93.4, 106.0]
+            name: 'Average Time (hours)',
+            data: data.average
 
         }]
-    });
+      });
     }
 
     $.ajax({
@@ -271,7 +267,7 @@
         },
 
         title: {
-            text: 'Idea map'
+            text: 'Location Heatmap'
         },
 
 

@@ -76,8 +76,6 @@ module.exports = {
 		var from = new Date(fromDate.split('-')[0], parseInt(fromDate.split('-')[1]) - 1, fromDate.split('-')[2])
 		var to = new Date(toDate.split('-')[0], parseInt(toDate.split('-')[1]) - 1, toDate.split('-')[2])
 		var now = new Date();
-		var daysOfYear = [];
-
 
 		for (var d = from; d <= to; d.setDate(d.getDate() + 1)) {
 		    categories.push(new Date(d).getFullYear() + '-' + (new Date(d).getMonth() + 1) + '-' + new Date(d).getDate());
@@ -118,6 +116,97 @@ module.exports = {
 						if (index == rows.length-1) {
 							return cb(null, { data : data , date : fromDate.split('-')[0] +'-'+ (parseInt(fromDate.split('-')[1]))+'-'+ fromDate.split('-')[2] + ' to ' + toDate.split('-')[0] +'-'+ (parseInt(toDate.split('-')[1]))+'-'+ toDate.split('-')[2]})
 						}
+					})
+				})
+			} else {
+				return cb("No data.", null)
+			}
+		})
+	}, 
+	getTopLocations : function (fromDate, toDate, cb) {
+		var locationQuery = 'SELECT * FROM location'
+		var timelogQuery = 'SELECT COUNT(*) AS count FROM timelog WHERE date BETWEEN ? AND ? AND locationId=?'
+		var enterQuery = 'SELECT * FROM timelog WHERE date BETWEEN ? AND ? AND locationId=? AND entryType="enter" ORDER BY time DESC'
+		var exitQuery = 'SELECT * FROM timelog WHERE date BETWEEN ? AND ? AND locationId=? AND entryType="exit" ORDER BY time DESC'
+
+
+		var from = new Date(fromDate.split('-')[0], parseInt(fromDate.split('-')[1]) - 1, fromDate.split('-')[2])
+		var to = new Date(toDate.split('-')[0], parseInt(toDate.split('-')[1]) - 1, toDate.split('-')[2])
+
+		var dataHolder = []
+
+		mysqlConnection.query(locationQuery, function (err, rows) {
+			if (rows.length > 0) {
+				rows.forEach(function (row, index) {
+					mysqlConnection.query(timelogQuery, [from, to, row.locationId], function (err, logs) {
+						var count = 0
+						if (logs) {
+							count = logs[0].count
+						}
+
+						mysqlConnection.query(enterQuery, [from, to, row.locationId], function (err, enter_row) {
+							mysqlConnection.query(exitQuery, [from, to, row.locationId], function (err, exit_row) {
+								var average = 0
+								var value = []
+
+								var less = 0
+								
+
+								if (enter_row && exit_row) {
+									less = exit_row.length 
+									if (exit_row.length > enter_row.length) {
+										less = enter_row.length
+									}
+
+									for (var i = 0; i < less; i++) {
+										var time1 = new Date(2000, 0, 1, enter_row[i].time.split(':')[0], enter_row[i].time.split(':')[1], enter_row[i].time.split(':')[2]); // 9:00 AM
+										var time2 = new Date(2000, 0, 1, exit_row[i].time.split(':')[0], exit_row[i].time.split(':')[1], exit_row[i].time.split(':')[2]);
+
+										var diff = new Date(time2 - time1)
+
+
+										value.push(Math.floor(diff / 1000 / 60 / 60))
+									}
+
+									var sum = 0
+									for (var j = 0; j < value.length; j++) {
+										sum = sum + value[j]
+									}
+
+									average = sum/value.length
+
+								}
+
+								var yeah = {
+									count : count, 
+									name : row.name, 
+									average : average
+								}
+
+								dataHolder.push(yeah)
+
+
+								if (index == rows.length-1) {
+									dataHolder.sort(function(a, b){
+									    return b.average - a.average;
+									});
+
+									var counts = []
+									var name = []
+									var average = []
+
+									for (var i = 0; i < dataHolder.length; i++) {
+										counts.push(dataHolder[i].count)
+										name.push(dataHolder[i].name)
+										average.push(dataHolder[i].average)
+									}
+																	
+									console.log(dataHolder)
+									
+									return cb(null, { count : counts.slice(0, 5) , name : name.slice(0, 5) , average : average.slice(0, 5) }) 
+								}
+							})						
+						})
 					})
 				})
 			} else {

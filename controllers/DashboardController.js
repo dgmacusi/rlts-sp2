@@ -31,5 +31,14 @@ module.exports = {
 		Dashboard.getHeatmap(function (err, output) {
 			res.json(output)
 		})
+	}, 
+	getTopLocations : function (req, res, next) {
+		var fromDate = new Date(new Date().setDate(new Date().getDate() - 7))
+  		var from = fromDate.getFullYear() +'-'+ (fromDate.getMonth() + 1) + '-' + fromDate.getDate()
+		var to = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' +	new Date().getDate()
+
+		Dashboard.getTopLocations(from, to, function (err, output) {
+			res.json(output)
+		})
 	}
 }
