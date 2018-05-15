@@ -67,7 +67,6 @@
         </div>
         <br><br>
         <div class="col s1"></div>
-        <form method="POST" action="/timelogs/search">
           <div class="input-field col s1">
             <input placeholder="From Date" type="text" class="datepicker" id="fromDate" name="fromDate">
             <label for="fromDate">From Date</label>
@@ -77,10 +76,8 @@
             <label for="toDate">To Date</label>
           </div>
           <div class="input-field col s1">
-             <button type="submit" class="waves-effect waves-light btn"><i class="material-icons">search</i></button>
+             <button id="date-button" class="waves-effect waves-light btn"><i class="material-icons">search</i></button>
           </div>
-          
-        </form>
         
       </div>
       <hr>
@@ -130,6 +127,36 @@
     </ul>
   </body>
   <script type="text/javascript">
+
+
+
+    $('#date-button').on('click', function (e) {
+      $.ajax({
+        url: "http://127.0.0.1:3000/dashboard/systemactivity2",
+        type: 'GET',
+        dataType: 'json'
+      }).done(function (data) {
+        systemActivity(data)
+      });
+
+      $.ajax({
+        url: "http://127.0.0.1:3000/dashboard/toplocations2",
+        type: 'GET',
+        dataType: 'json'
+      }).done(function (data) {
+        topLocations(data)
+      });
+
+      $.ajax({
+        url: "http://127.0.0.1:3000/dashboard/locationactivity2",
+        type: 'GET',
+        dataType: 'json'
+      }).done(function (data) {
+        locationActivity(data)
+      });
+    })
+
+
     // LINE GRAPH
     $.ajax({
         url: "http://127.0.0.1:3000/dashboard/systemactivity",
@@ -142,7 +169,10 @@
     var systemActivity = function (data) {
       Highcharts.chart('system-activity', {
           xAxis: {
-              categories: data.categories
+              categories: data.categories, 
+              title: {
+                  text: 'Day'
+              }
           },
           yAxis: {
             title: {
@@ -151,7 +181,8 @@
           }, 
 
           series: [{
-              data: data.values
+              data: data.values, 
+              name : 'Logs per Day'
           }], 
           title : {
             text : "System Activity (Number of Logs/Day)"

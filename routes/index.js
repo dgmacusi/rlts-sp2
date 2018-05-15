@@ -90,6 +90,9 @@ router.get('/dashboard/systemactivity', dashboardController.getSystemActivity)
 router.get('/dashboard/locationactivity', dashboardController.getLocationActivity)
 router.get('/dashboard/heatmap', dashboardController.getHeatmap)
 router.get('/dashboard/toplocations', dashboardController.getTopLocations)
+router.get('/dashboard/systemactivity2', dashboardController.getSystemActivity2)
+router.get('/dashboard/locationactivity2', dashboardController.getLocationActivity2)
+router.get('/dashboard/toplocations2', dashboardController.getTopLocations2)
 
 // Web API controller
 router.get('/getAllBeacons/web', webApiController.getAllBeacons)
