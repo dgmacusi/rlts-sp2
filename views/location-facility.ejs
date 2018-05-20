@@ -11,9 +11,9 @@
   </head>
   <body>
     <div class="navbar-fixed">
-      <nav class="grey">
+      <nav class="blue darken-4">
         <div class="nav-wrapper">
-          <a href="#" class="brand-logo center">LOGO</a>
+          <a href="#" class="brand-logo center">RLTS</a>
           FACILITY
           <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li><a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="large material-icons">menu</i></a></li>
@@ -58,13 +58,13 @@
 
         <div class="col s4">
           <div class="card z-depth-4" style="height:156px;">
-            <div class="card-action grey white-text">
+            <div class="card-action blue darken-1 white-text">
               <span class="card-title"><%= facilities[i].name%></span>
 
               <button type="submit" class="right" formaction="/facility/delete/<%= facilities[i].facilityId%>"><i class="small material-icons">delete</i></button>
               <button type="submit" class="right" formaction="/facility/edit"><i class="small material-icons">edit</i></button>
             </div>
-            <div class="card-content left grey lighten-3" style="width:30%; padding-bottom: 23px;">
+            <div class="card-content left blue lighten-4" style="width:30%; padding-bottom: 23px;">
               <p>Facility ID: </p>
               <p>Caretaker: </p>
               <p>Beacon: </p>
@@ -81,7 +81,7 @@
       <% } %>
     </div>
 
-    <a href="/location/add" class="add-button2 btn-floating btn-large waves-effect waves-light grey" style="position: fixed;"><i class="material-icons">add</i></a>
+    <a href="/location/add" class="add-button2 btn-floating btn-large waves-effect waves-light blue darken-1" style="position: fixed;"><i class="material-icons">add</i></a>
 
     <ul id="slide-out" class="side-nav">
       <li>
@@ -99,7 +99,7 @@
           <li><a href="/users/student">Student</a></li>
           <li><a href="/users/nonteaching">Non-teaching</a></li>
         </ul>
-      <li><a class="dropdown-button white-text grey" href="/location/classroom" data-activates="location-type"><i class="material-icons">location_on</i>LOCATIONS</a></li>
+      <li><a class="dropdown-button white-text blue lighten-1" href="/location/classroom" data-activates="location-type"><i class="material-icons">location_on</i>LOCATIONS</a></li>
         <ul id="location-type" class="dropdown-content">
           <li><a href="/location/classroom">Classroom</a></li>
           <li><a href="/location/facility">Facility</a></li>

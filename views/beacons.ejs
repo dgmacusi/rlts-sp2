@@ -11,9 +11,9 @@
   </head>
   <body>
     <div class="navbar-fixed">
-      <nav class="grey">
+      <nav class="blue darken-4">
         <div class="nav-wrapper">
-          <a href="#" class="brand-logo center">LOGO</a>
+          <a href="#" class="brand-logo center">RLTS</a>
            BEACONS
           <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li><a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="large material-icons">menu</i></a></li>
@@ -24,7 +24,7 @@
         </div>
       </nav>
     </div>
-    <a href="/beacons/add" style="position: fixed;" class="add-button2 btn-floating btn-large waves-effect waves-light grey"><i class="material-icons">add</i></a>
+    <a href="/beacons/add" style="position: fixed;" class="add-button2 btn-floating btn-large waves-effect waves-light blue darken-1"><i class="material-icons">add</i></a>
 
     <br>
     <div class="row">
@@ -59,13 +59,13 @@
 
         <div class="col s4">
           <div class="card z-depth-4" style="height:252px;">
-            <div class="card-action grey white-text">
+            <div class="card-action blue darken-1 white-text">
               <span class="card-title"><%= beacons[i].name%></span>
 
               <button type="submit" class="right" formaction="/beacons/delete/<%= beacons[i].beaconId%>"><i class="small material-icons">delete</i></button>
               <button type="submit" class="right" formaction="/beacons/edit"><i class="small material-icons">edit</i></button>
             </div>
-            <div class="card-content left grey lighten-3" style="width:30%; padding-bottom: 23px;">
+            <div class="card-content left blue lighten-4" style="width:30%; padding-bottom: 23px;">
               <p>Beacon ID: </p>
               <p>UUID: </p>
               <p>&nbsp;</p>
@@ -100,7 +100,7 @@
         </div>
       </li>
       <li><a href="/home"><i class="material-icons">dashboard</i>DASHBOARD</a></li>
-      <li><a class="grey white-text" href="/beacons"><i class="material-icons">my_location</i>BEACONS</a></li>
+      <li><a class="blue lighten-1 white-text" href="/beacons"><i class="material-icons">my_location</i>BEACONS</a></li>
       <!-- Dropdown Structure -->
       <li><a class="dropdown-button" href="/users/administrator" data-activates="user-type"><i class="material-icons">account_circle</i>USERS</a></li>
         <ul id="user-type" class="dropdown-content">
