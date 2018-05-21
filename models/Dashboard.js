@@ -249,7 +249,7 @@ module.exports = {
 
 */
 							data.push({
-								name : location_row[index].name, 
+								name : location_row[index].name + ': ' + (enter - exit), 
 								value : (enter - exit), 
 								colorValue : (enter - exit)
 							})
