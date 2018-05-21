@@ -226,8 +226,8 @@ module.exports = {
 		mysqlConnection.query(locationQuery, function (err, location_row) {
 
 			if (location_row.length > 0) {
-				var a = 0
-				var b = 0
+//				var a = 0
+//				var b = 0
 				location_row.forEach(function (row, index) {
 					mysqlConnection.query(timelogQuery, [location_row[index].locationId, today], function (err, logs) {
 						var enter = 0
@@ -235,29 +235,34 @@ module.exports = {
 							enter = logs[0].count
 						}
 
-						console.log(a+"-"+b)
-
-
 						mysqlConnection.query(timelog2Query, [location_row[index].locationId, today], function (err, logs2) {
 							var exit = 0
 							if (logs2) {
 								exit = logs2[0].count
 							}
-
+/*
 							location_row[index].array = []
 							location_row[index].array.push(a)
 							location_row[index].array.push(b)
 							location_row[index].array.push(location_row[index].name)	
 							location_row[index].array.push('Current number of people in the area: '+ '<b>' +(enter - exit) + '</b>')
 
-							data.push(location_row[index].array)
+*/
+							data.push({
+								name : location_row[index].name, 
+								value : (enter - exit), 
+								colorValue : (enter - exit)
+							})
+
+
+/*							data.push(location_row[index].array)
 
 							b++;
 							if (!(b < 3)) {
 								a++;
 								b = 0;
 							}
-
+*/
 							if (index == location_row.length-1) {
 								//return cb(null, jsonArray)
 								console.log(data)
