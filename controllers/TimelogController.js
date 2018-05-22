@@ -5,13 +5,13 @@ var User = require(`${__dirname}/../models/User`);
 module.exports = {
 	getTimelogPage : function (req, res, next) {
 		Timelog.getTimelogs(function (err, timelogs) {
-			res.render('timelogs', { title : "MyApp" , timelogs : timelogs})
+			res.render('timelogs', { title : "RLTS" , timelogs : timelogs})
 		})
 	}, 
 	getAddTimelogPage : function (req, res, next) {
 		Location.getLocations(function (err, locations) {
 			User.getUsers(function (err, users) {
-				res.render('timelog-add', { title : "My App" , users : users, locations : locations })
+				res.render('timelog-add', { title : "RLTS" , users : users, locations : locations })
 			})
 		})
 	}, 
@@ -32,7 +32,7 @@ module.exports = {
 	searchTimelog : function (req, res, next) {
 		Timelog.searchTimelog(req.body, function (err, timelogs) {
 			if (err) console.log(err);	 
-			res.render('timelogs', { title : "MyApp" , timelogs : timelogs})
+			res.render('timelogs', { title : "RLTS" , timelogs : timelogs})
 		})
 	}	
 }

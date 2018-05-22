@@ -4,23 +4,23 @@ var User = require(`${__dirname}/../models/User`);
 
 module.exports = {
 	getLocationPage : function (req, res, next) {
-		res.render('locations', { title : "MyApp" })
+		res.render('locations', { title : "RLTS" })
 	},
 	getClassroomPage : function (req, res, next) {
 		Location.getClassrooms(function (err, classrooms) {
 			console.log(classrooms)
-			res.render('location-classroom', { title : "MyApp" , classrooms : classrooms })
+			res.render('location-classroom', { title : "RLTS" , classrooms : classrooms })
 		})
 	},
 	getFacilityPage : function (req, res, next) {
 		Location.getFacilities(function (err, facilities) {
-			res.render('location-facility', { title : "MyApp" , facilities : facilities })
+			res.render('location-facility', { title : "RLTS" , facilities : facilities })
 		})
 	}, 
 	getAddLocationPage : function (req, res, next) {
 		Beacon.getBeacons(function (err, beacons) {
 			User.getAllStaff(function (err, staff) {
-				res.render('location-add', { title : "MyApp" , beacons : beacons, staff : staff })
+				res.render('location-add', { title : "RLTS" , beacons : beacons, staff : staff })
 			})
 		})
 	}, 
@@ -55,7 +55,7 @@ module.exports = {
 				    return classroom.name.toLowerCase().indexOf(req.body.search.toLowerCase()) != -1;
 				});
 			}
-			res.render('location-classroom', { title : "MyApp", classrooms : myArray })
+			res.render('location-classroom', { title : "RLTS", classrooms : myArray })
 		})
 	},
 	searchFacility : function (req, res, next) {
@@ -66,7 +66,7 @@ module.exports = {
 				    return facility.name.toLowerCase().indexOf(req.body.search.toLowerCase()) != -1;
 				});
 			}
-			res.render('location-facility', { title : "MyApp", facilities : myArray })
+			res.render('location-facility', { title : "RLTS", facilities : myArray })
 		})
 	}, 
 	getEditClassroomPage : function (req, res, next) {
@@ -85,7 +85,7 @@ module.exports = {
 
 		Beacon.getBeacons(function (err, beacons) {
 			User.getAllStaff(function (err, staff) {
-				res.render('classroom-edit', { title : "MyApp" , beacons : beacons, staff : staff, classroom : classroom })
+				res.render('classroom-edit', { title : "RLTS" , beacons : beacons, staff : staff, classroom : classroom })
 			})
 		})
 	}, 
@@ -115,7 +115,7 @@ module.exports = {
 
 		Beacon.getBeacons(function (err, beacons) {
 			User.getAllStaff(function (err, staff) {
-				res.render('facility-edit', { title : "MyApp" , beacons : beacons, staff : staff, facility : facility })
+				res.render('facility-edit', { title : "RLTS" , beacons : beacons, staff : staff, facility : facility })
 			})
 		})
 	}, 

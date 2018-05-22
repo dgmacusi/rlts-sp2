@@ -1,9 +1,9 @@
 module.exports = {
 	getIndexPage : function (req, res, next) {
-		res.render('index', { title : 'Initial Web App' })
+		res.render('index', { title : 'RLTS' })
 	}, 
 	getLoginPage : function (req, res, next) {
-		res.render('login', { title : 'Initial Web App' })
+		res.render('login', { title : 'RLTS' })
 	}, 
 	getHomePage : function (req, res, next) {
 		res.render('dashboard')
@@ -12,12 +12,12 @@ module.exports = {
 		res.redirect('/home')
 	},
 	getTimelogPage : function (req, res, next) {
-		res.render('timelogs', { title : "MyApp" })
+		res.render('timelogs', { title : "RLTS" })
 	}, 
 	getUserPage : function (req, res, next) {
-		res.render('users', { title : "MyApp" })
+		res.render('users', { title : "RLTS" })
 	},
 	getAddBeaconPage : function (req, res, next) {
-		res.render('beacon-add', { title : "MyApp" })
+		res.render('beacon-add', { title : "RLTS" })
 	}
 }

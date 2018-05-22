@@ -14,7 +14,7 @@ module.exports = {
 	}, 
 	getBeaconPage : function (req, res, next) {
 		Beacon.getBeacons(function (err, beacons) {
-			res.render('beacons', { title : "MyApp" , beacons : beacons})
+			res.render('beacons', { title : "RLTS" , beacons : beacons})
 		})
 	},
 
@@ -41,11 +41,11 @@ module.exports = {
 			name : req.body.name
 		}
 
-		res.render('beacon-edit', { title : "MyApp", beacon : beacon })
+		res.render('beacon-edit', { title : "RLTS", beacon : beacon })
 	}, 
 	searchBeacons : function (req, res, next) {
 		Beacon.searchBeacons(req.body.search, function (err, beacons) {
-			res.render('beacons', { title : "MyApp" , beacons : beacons})
+			res.render('beacons', { title : "RLTS" , beacons : beacons})
 		})
 	}
 
